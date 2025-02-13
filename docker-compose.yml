@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: flapi_cms_mysql_experience
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: flapicms7
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin_password
+    ports:
+      - "3310:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db_dump.sql:/docker-entrypoint-initdb.d/db_dump.sql
+    networks:
+      - flapi_cms_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin_flapicms_experience
+    restart: always
+    environment:
+      PMA_HOST: mysql  # Nom du service MySQL
+      PMA_PORT: 3306
+      PMA_USER: admin  # Correspond à MYSQL_USER
+      PMA_PASSWORD: admin_password  # Correspond à MYSQL_PASSWORD
+    ports:
+      - "8090:80"  # Utilisez un autre port pour éviter les conflits
+    networks:
+      - flapi_cms_network
+
+volumes:
+  mysql_data:
+
+networks:
+  flapi_cms_network:
