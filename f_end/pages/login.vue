@@ -1,65 +1,60 @@
 <template>
-  <div class="hold-transition login-page">
-    <div class="login-box">
-      <!-- /.login-logo -->
-      <div class="card card-outline card-primary">
+  <div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="w-full max-w-md">
+      <!-- Login Box -->
+      <div class="bg-white shadow-md rounded-lg overflow-hidden">
         <div class="text-center p-5 pt-15">
-          <a href="/" class="h1"><b>Sub</b>Manage</a>
+          <a href="/" class="text-2xl font-bold"><span class="font-bold">Sub</span>Manage</a>
         </div>
-        <div class="card-body">
-          <p class="login-box-msg">Sign in to start your session</p>
+        <div class="p-6">
+          <p class="text-center mb-4">Sign in to start your session</p>
 
           <form action="#">
-            <div class="input-group mb-3">
-              <input v-model="user.email" type="email" class="form-control" placeholder="Email">
-              <div class="input-group-append">
-                <div class="input-group-text">
-                  <span class="fas fa-envelope"></span>
-                </div>
+            <div class="mb-4 relative">
+              <input v-model="user.email" type="email" class="w-full p-2 border rounded-md pr-10" placeholder="Email">
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                <span class="text-gray-500">
+                  <i class="fas fa-envelope"></i>
+                </span>
               </div>
             </div>
-            <div class="input-group mb-3">
-              <input v-model="user.password" type="password" class="form-control" placeholder="Password">
-              <div class="input-group-append">
-                <div class="input-group-text">
-                  <span class="fas fa-lock"></span>
-                </div>
+            <div class="mb-4 relative">
+              <input v-model="user.password" type="password" class="w-full p-2 border rounded-md pr-10" placeholder="Password">
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                <span class="text-gray-500">
+                  <i class="fas fa-lock"></i>
+                </span>
               </div>
             </div>
-            <div class="row">
-              <div class="col-8">
-                <div class="icheck-primary">
-                  <input type="checkbox" id="remember">
-                  <label for="remember">
+            <div class="flex items-center mb-4">
+              <div class="flex-grow">
+                <div class="flex items-center">
+                  <input type="checkbox" id="remember" class="mr-2">
+                  <label for="remember" class="text-sm">
                     Remember Me
                   </label>
                 </div>
               </div>
-              <!-- /.col -->
-              <div class="col-4">
-                <Button @click.prevent="prelogin()" :loading="loading" type="primary" class="btn-primary btn-block">Sign
-                  In</Button>
-                <!-- <button @click.prevent="login()" type="submit" class="btn btn-primary btn-block">Sign In</button> -->
+              <div class="">
+                <Button @click.prevent="prelogin()" :loading="loading" type="primary" class="btn-primary">
+                  Sign In
+                </Button>
               </div>
-              <!-- /.col -->
             </div>
           </form>
 
           <div>
-            <div class="social-auth-links text-center mt-2 mb-3">
-              <router-link to="/forgotPassword" class="btn btn-block btn-danger">
+            <div class="text-center mt-4 mb-3">
+              <router-link to="/forgotPassword" class="block w-full py-2 px-4 bg-red-600 text-white rounded-md hover:bg-red-700">
                 <Icon type="md-key" /> Forgot Password ?
               </router-link>
             </div>
           </div>
 
         </div>
-        <!-- /.card-body -->
       </div>
-      <!-- /.card -->
     </div>
   </div>
-
 </template>
 
 <script>
@@ -184,13 +179,5 @@ export default {
 </script>
 
 <style scoped>
-/* Import external styles within the scoped block */
-@import "../public/plugins/fontawesome-free/css/all.min.css";
-@import "../public/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css";
-@import "../public/plugins/icheck-bootstrap/icheck-bootstrap.min.css";
-@import "../public/plugins/jqvmap/jqvmap.min.css";
-@import "../public/plugins/overlayScrollbars/css/OverlayScrollbars.min.css";
-@import "../public/plugins/daterangepicker/daterangepicker.css";
-@import "../public/plugins/summernote/summernote-bs4.min.css";
-@import "../public/dist/css/adminlte.min.css";
+/* Styles propres au composant si nécessaire */
 </style>

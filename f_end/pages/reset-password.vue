@@ -1,51 +1,50 @@
 <template>
-  <div class="d-flex flex-column flex-root">
+  <div class="flex flex-col min-h-screen">
     <!--begin::Authentication - Password reset -->
-    <div
-      class="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed"
+    <div class="flex flex-col flex-grow bg-center bg-no-repeat bg-contain"
       style="background-image: url(assets/media/illustrations/sketchy-1/14.png)">
       <!--begin::Content-->
-      <div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
+      <div class="flex flex-col items-center justify-center p-10 pb-20">
         <!--begin::Logo-->
         <router-link to="/login" class="mb-12">
-          <img alt="Logo" src="@/public/assets/media/logos/Flapi_logo.png" class="h-40px" />
+          <img alt="Logo" src="@/public/assets/media/logos/Flapi_logo.png" class="h-10" />
         </router-link>
         <!--end::Logo-->
         <!--begin::Wrapper-->
-        <div class="w-lg-500px bg-body rounded shadow-sm p-10 p-lg-15 mx-auto">
+        <div class="w-full max-w-lg bg-white rounded shadow-sm p-10 p-lg-15 mx-auto">
           <!--begin::Form-->
-          <form class="form w-100" novalidate="novalidate" id="kt_password_reset_form">
+          <form class="w-full" novalidate="novalidate" id="kt_password_reset_form">
             <!--begin::Heading-->
             <div class="text-center mb-10">
               <!--begin::Title-->
-              <h1 class="text-dark mb-3">Reset Password</h1>
+              <h1 class="text-gray-900 mb-3 text-2xl font-bold">Reset Password</h1>
               <!--end::Title-->
               <!--begin::Link-->
-              <div class="text-gray-400 fw-bold fs-4">Enter your new password.</div>
+              <div class="text-gray-500 font-bold text-lg">Enter your new password.</div>
               <!--end::Link-->
             </div>
             <!--begin::Heading-->
             <!--begin::Input group-->
-            <div class="fv-row mb-10">
-              <label class="form-label fw-bolder text-gray-900 fs-6">Password</label>
-              <input v-model="password" class="form-control form-control-solid" type="password" placeholder=""
+            <div class="mb-10">
+              <label class="form-label font-bold text-gray-900 text-base">Password</label>
+              <input v-model="password" class="w-full p-2 border rounded-md bg-gray-50" type="password" placeholder=""
                 name="email" autocomplete="off" />
             </div>
-            <div class="fv-row mb-10">
-              <label class="form-label fw-bolder text-gray-900 fs-6">Confim Password</label>
-              <input v-model="c_password" class="form-control form-control-solid" type="password" placeholder=""
+            <div class="mb-10">
+              <label class="form-label font-bold text-gray-900 text-base">Confim Password</label>
+              <input v-model="c_password" class="w-full p-2 border rounded-md bg-gray-50" type="password" placeholder=""
                 name="email" autocomplete="off" />
             </div>
             <!--end::Input group-->
             <!--begin::Actions-->
-            <div class="d-flex flex-wrap justify-content-center pb-lg-0">
+            <div class="flex flex-wrap justify-center pb-lg-0">
               <button @click="resetPassword" type="button" id="kt_password_reset_submit"
-                class="btn btn-lg btn-primary fw-bolder me-4">
+                class="btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4">
                 <span v-if="!loading" class="indicator-label">Submit</span>
                 <span v-else class="indicator-label">Please wait...
-                  <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                  <span class="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin align-middle ml-2"></span></span>
               </button>
-              <router-link to="/login" class="btn btn-lg btn-light-primary fw-bolder">Cancel</router-link>
+              <router-link to="/login" class="btn bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded">Cancel</router-link>
             </div>
             <!--end::Actions-->
           </form>
@@ -55,21 +54,17 @@
       </div>
       <!--end::Content-->
       <!--begin::Footer-->
-      <div class="d-flex flex-center flex-column-auto p-10">
+      <div class="flex justify-center items-center p-10">
         <!--begin::Links-->
-        <div class="d-flex align-items-center fw-bold fs-6">
-          <!-- <a href="https://keenthemes.com" class="text-muted text-hover-primary px-2">About</a>
-          <a href="mailto:support@keenthemes.com" class="text-muted text-hover-primary px-2">Contact</a>
-          <a href="https://1.envato.market/EA4JP" class="text-muted text-hover-primary px-2">Contact Us</a> -->
+        <div class="flex items-center font-bold text-base">
+          <!-- Footer content -->
         </div>
         <!--end::Links-->
       </div>
-      <div class="d-flex flex-center flex-column-auto p-10">
+      <div class="flex justify-center items-center p-10">
         <!--begin::Links-->
-        <div class="d-flex align-items-center fw-bold fs-6">
-          <!-- <a href="https://keenthemes.com" class="text-muted text-hover-primary px-2">About</a>
-          <a href="mailto:support@keenthemes.com" class="text-muted text-hover-primary px-2">Contact</a>
-          <a href="https://1.envato.market/EA4JP" class="text-muted text-hover-primary px-2">Contact Us</a> -->
+        <div class="flex items-center font-bold text-base">
+          <!-- Footer content -->
         </div>
         <!--end::Links-->
       </div>
