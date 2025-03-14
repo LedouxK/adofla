@@ -283,31 +283,6 @@ CREATE TABLE `password_resets` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `password_resets`
---
-
-INSERT INTO `password_resets` (`id`, `email`, `token`, `created_at`, `updated_at`) VALUES
-(1, 'biprobhowmik5@gmail.com', '35b9aea1fe0117eef49995fba3e8eb7aa49003cd726d95a6d280362007d37d48', '2024-12-13 03:31:41', '2024-12-13 03:31:41'),
-(2, 'biprobhowmik5@gmail.com', 'f4dd5988247ea523da4db2cd18d8c70395da7520b889b49c7430e378316cc65c', '2024-12-13 03:32:40', '2024-12-13 03:32:40'),
-(3, 'biprobhowmik5@gmail.com', '45e8f2610fd5c8f67be72c164a8eaadf45251e2c62e843bdbdceedbdf81e33da', '2024-12-13 03:44:17', '2024-12-13 03:44:17'),
-(4, 'biprobhowmik5@gmail.com', 'e4a51397f7df86585f8db8a070a5e72a830b92926a263c22e4acf2dc9c6fd090', '2024-12-13 03:55:39', '2024-12-13 03:55:39'),
-(5, 'biprobhowmik5@gmail.com', '66e8ca42433b06c326bc8a2fb5a1cbc52c90082314c291358895767318a4be08', '2024-12-13 03:55:47', '2024-12-13 03:55:47'),
-(6, 'biprobhowmik5@gmail.com', 'c387a4f8027507f39d3083fd304c433d6d12413b37a04342a8747f06ac34ef0f', '2024-12-13 03:58:38', '2024-12-13 03:58:38'),
-(7, 'biprobhowmik5@gmail.com', '8f2ace3bb30a8541e4a7387a3ab47e3c949408345542e4b1b4a02ca8e7824db8', '2024-12-13 04:06:12', '2024-12-13 04:06:12'),
-(8, 'biprobhowmik5@gmail.com', '5a242ab8c6ea3c34f98da8a6971aca146c3d47caae3a978006e8c85ccbe893fb', '2024-12-13 04:11:52', '2024-12-13 04:11:52'),
-(9, 'biprobhowmik5@gmail.com', 'c9b34af87bb512098d8edb763af670684745bd3a59c5de9510efeb78cbc0c863', '2024-12-13 04:14:13', '2024-12-13 04:14:13'),
-(10, 'biprobhowmik5@gmail.com', '9ab0c106b8606c9c719a99085048a584c744309f12d029eee590b5923fdea8a3', '2024-12-13 04:17:16', '2024-12-13 04:17:16'),
-(11, 'biprobhowmik5@gmail.com', '0dd351d283f10262933ffd11c6d08cc2e54de6a4f891d99ecd5109a48194d466', '2024-12-13 04:56:57', '2024-12-13 04:56:57'),
-(12, 'biprobhowmik5@gmail.com', '65940cb234524375e83c226afddcfd114d832f7d2a20368cf2c179185b71e85d', '2024-12-13 04:59:26', '2024-12-13 04:59:26'),
-(13, 'biprobhowmik5@gmail.com', '0af3d20d49bf80575b6dcba6cf8df2547dca6fb12010892c79f5706eb8c186d0', '2024-12-13 05:01:33', '2024-12-13 05:01:33'),
-(14, 'biprobhowmik5@gmail.com', 'ab40b8ce28a7ad7bc4795e3aab02ead86b3ee078c544470a8bc9c0603642876e', '2024-12-13 05:06:02', '2024-12-13 05:06:02'),
-(15, 'biprobhowmik5@gmail.com', 'd76ed1d02c46fbea488c9ccb25fce9c71352484570e5fd3b39fc0327c84302c1', '2024-12-13 05:15:08', '2024-12-13 05:15:08'),
-(16, 'biprobhowmik5@gmail.com', 'a720834e4e6b8188c8d3354cf736a6940864ca5c6b4bef9bd44c0f4488baceb7', '2024-12-13 07:28:43', '2024-12-13 07:28:43'),
-(17, 'biprobhowmik5@gmail.com', 'c6067b44ccaf272f3981b28aa062bdf0c805a860efb298aac7507533f0871224', '2024-12-13 07:32:45', '2024-12-13 07:32:45'),
-(18, 'biprobhowmik5@gmail.com', 'f688e7f5313ca8ce648a223c979f43d1105a8ebf5db7800cecaed9cdd326e493', '2024-12-13 07:33:32', '2024-12-13 07:33:32'),
-(19, 'biprobhowmik5@gmail.com', 'ca79ffd54b8595590894e1c6784dc549aea03b0bc2f1a307abca1b944e1359fa', '2024-12-13 07:34:02', '2024-12-13 07:34:02'),
-(20, 'biprobhowmik5@gmail.com', '10773a0327286812ac9449607bb613c72025fd986e56caea1723c99e25b45931', '2024-12-13 07:34:41', '2024-12-13 07:34:41');
 
 -- --------------------------------------------------------
 
