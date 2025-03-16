@@ -25,7 +25,7 @@
 
     <div class="pt-16"> <!-- Padding en haut pour compenser l'en-tête fixe -->
       <!-- Section Héro -->
-      <section class="bg-gradient-to-r from-indigo-50 to-blue-50 py-20">
+      <section class="bg-gradient-to-r from-purple-50 to-violet-100 py-20">
         <div class="container mx-auto px-4">
           <div class="flex flex-wrap items-center">
             <div class="w-full lg:w-1/2 mb-10 lg:mb-0">
@@ -36,17 +36,17 @@
                 Développez des applications web exceptionnelles avec notre CMS glisser-déposer. Déploiement en quelques secondes, domaine dédié et sécurisation optimale de vos données.
               </p>
               <div class="flex flex-wrap">
-                <Button type="primary" size="large" class="mr-4 mb-4">Commencer</Button>
-                <Button type="default" size="large" class="mb-4">Voir la démo</Button>
+                <Button type="primary" size="large" class="mr-4 mb-4 bg-violet-600 hover:bg-violet-700 border-0">Commencer</Button>
+                <Button type="default" size="large" class="mb-4 border-violet-400 text-violet-600">Voir la démo</Button>
               </div>
             </div>
             <div class="w-full lg:w-1/2">
-              <div class="bg-indigo-100 p-8 rounded-lg shadow-lg flex items-center justify-center">
+              <div class="bg-violet-100 p-8 rounded-lg shadow-lg flex items-center justify-center">
                 <div class="text-center">
-                  <div class="mx-auto w-32 h-32 bg-indigo-500 rounded-full flex items-center justify-center mb-4">
+                  <div class="mx-auto w-32 h-32 bg-violet-500 rounded-full flex items-center justify-center mb-4">
                     <Icon type="ios-move" size="64" color="#ffffff" />
                   </div>
-                  <p class="text-indigo-800 font-bold">Interface Glisser-Déposer</p>
+                  <p class="text-violet-800 font-bold">Interface Glisser-Déposer</p>
                 </div>
               </div>
             </div>
@@ -61,7 +61,7 @@
           
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div class="p-6 border border-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <div class="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-indigo-100 text-indigo-500">
+              <div class="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-violet-100 text-violet-500">
                 <Icon type="ios-move" size="24" />
               </div>
               <h3 class="text-xl font-semibold mb-2">Glisser-Déposer</h3>
@@ -69,7 +69,7 @@
             </div>
             
             <div class="p-6 border border-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <div class="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-blue-100 text-blue-500">
+              <div class="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-violet-100 text-violet-500">
                 <Icon type="md-flash" size="24" />
               </div>
               <h3 class="text-xl font-semibold mb-2">Déploiement Instantané</h3>
@@ -77,7 +77,7 @@
             </div>
             
             <div class="p-6 border border-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <div class="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-green-100 text-green-500">
+              <div class="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-violet-100 text-violet-500">
                 <Icon type="ios-globe" size="24" />
               </div>
               <h3 class="text-xl font-semibold mb-2">Domaine Personnalisé</h3>
@@ -85,7 +85,7 @@
             </div>
             
             <div class="p-6 border border-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <div class="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-red-100 text-red-500">
+              <div class="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-violet-100 text-violet-500">
                 <Icon type="md-lock" size="24" />
               </div>
               <h3 class="text-xl font-semibold mb-2">Sécurité des Données</h3>
@@ -96,14 +96,14 @@
       </section>
 
       <!-- Section Comment ça Marche -->
-      <section class="py-16 bg-gray-50">
+      <section class="py-16 bg-purple-50">
         <div class="container mx-auto px-4">
           <h2 class="text-3xl font-bold text-center mb-16">Comment Ça Marche</h2>
           
           <div class="flex flex-wrap -mx-4">
             <div class="w-full md:w-1/3 px-4 mb-8">
               <div class="text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-500 text-white mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-violet-500 text-white mb-6">
                   <span class="text-xl font-bold">1</span>
                 </div>
                 <h3 class="text-xl font-semibold mb-4">Choisissez les Composants</h3>
@@ -113,7 +113,7 @@
             
             <div class="w-full md:w-1/3 px-4 mb-8">
               <div class="text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-500 text-white mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-violet-500 text-white mb-6">
                   <span class="text-xl font-bold">2</span>
                 </div>
                 <h3 class="text-xl font-semibold mb-4">Personnalisez le Design</h3>
@@ -123,7 +123,7 @@
             
             <div class="w-full md:w-1/3 px-4 mb-8">
               <div class="text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-500 text-white mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-violet-500 text-white mb-6">
                   <span class="text-xl font-bold">3</span>
                 </div>
                 <h3 class="text-xl font-semibold mb-4">Publiez Instantanément</h3>
@@ -137,26 +137,26 @@
       <!-- Section Tarifs (Votre Section Originale) -->
       <section class="py-16 bg-white">
         <div class="absolute inset-x-0 -top-3 -z-10 transform-gpu overflow-hidden px-36 blur-3xl mb-10" aria-hidden="true">
-          <div class="mx-auto aspect-[1155/678] w-[72.1875rem] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
+          <div class="mx-auto aspect-[1155/678] w-[72.1875rem] bg-gradient-to-tr from-violet-300 to-violet-500 opacity-30" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
         </div>
 
         <div class="mx-auto max-w-4xl text-center">
-          <h2 class="text-lg font-semibold text-indigo-600">Tarifs</h2>
+          <h2 class="text-lg font-semibold text-violet-600">Tarifs</h2>
           <p class="mt-4 text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">Choisissez le forfait adapté à vos besoins</p>
         </div>
 
         <p class="mx-auto mt-6 max-w-2xl text-pretty text-center text-lg font-medium text-gray-600 sm:text-xl/8">Optez pour un forfait abordable qui regroupe les meilleures fonctionnalités pour engager votre audience, fidéliser vos clients et stimuler vos ventes.</p>
         
         <div class="mx-auto mt-16 mb-16 grid max-w-lg grid-cols-1 items-center gap-y-6 sm:mt-20 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-3">
-          <div v-for="(tier, tierIdx) in subscriptions" :key="tier.id" :class="[tier.featured ? 'relative bg-gray-900 shadow-2xl' : 'bg-white/60 sm:mx-8 lg:mx-0', tier.featured ? '' : tierIdx === 0 ? 'rounded-t-3xl sm:rounded-b-none lg:rounded-bl-3xl lg:rounded-tr-none' : 'sm:rounded-t-none lg:rounded-bl-none lg:rounded-tr-3xl', 'rounded-3xl p-8 ring-1 ring-gray-900/10 sm:p-10']">
-            <h3 :id="tier.id" :class="[tier.featured ? 'text-indigo-400' : 'text-indigo-600', 'text-base/7 font-semibold']">{{ tier.name }}</h3>
+          <div v-for="(tier, tierIdx) in subscriptions" :key="tier.id" :class="[tier.featured ? 'relative bg-violet-900 shadow-2xl' : 'bg-white/60 sm:mx-8 lg:mx-0', tier.featured ? '' : tierIdx === 0 ? 'rounded-t-3xl sm:rounded-b-none lg:rounded-bl-3xl lg:rounded-tr-none' : 'sm:rounded-t-none lg:rounded-bl-none lg:rounded-tr-3xl', 'rounded-3xl p-8 ring-1 ring-gray-900/10 sm:p-10']">
+            <h3 :id="tier.id" :class="[tier.featured ? 'text-violet-200' : 'text-violet-600', 'text-base/7 font-semibold']">{{ tier.name }}</h3>
             <p class="mt-4 flex items-baseline gap-x-2">
               <span :class="[tier.featured ? 'text-white' : 'text-gray-900', 'text-5xl font-semibold tracking-tight']">{{ tier.price }} €</span>
             </p>
             <p :class="[tier.featured ? 'text-gray-300' : 'text-gray-600', 'mt-6 text-base/7']">{{ tier.description }}</p>
             <ul role="list" :class="[tier.featured ? 'text-gray-300' : 'text-gray-600', 'mt-8 space-y-3 text-sm/6 sm:mt-10']">
               <li v-for="feature in tier.features" :key="feature" class="flex gap-x-3">
-                <CheckIcon :class="[tier.featured ? 'text-indigo-400' : 'text-indigo-600', 'h-6 w-5 flex-none']" aria-hidden="true" />
+                <CheckIcon :class="[tier.featured ? 'text-violet-200' : 'text-violet-600', 'h-6 w-5 flex-none']" aria-hidden="true" />
                 {{ feature }}
               </li>
             </ul>
@@ -164,26 +164,26 @@
               <button @click="tier.subType = 'month'" :class="tier.subType == 'month' ? 'toggle-option active' : 'toggle-option'">Mensuel</button>
               <button @click="tier.subType = 'year'" :class="tier.subType == 'year' ? 'toggle-option active' : 'toggle-option'">Annuel</button>
             </div>
-            <a @click="subscribeToPlan(tier)" :class="[tier.featured ? 'bg-indigo-500 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline-indigo-500' : 'text-indigo-600 ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300 focus-visible:outline-indigo-600', 'mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10 cursor-pointer']">Commencer maintenant</a>
+            <a @click="subscribeToPlan(tier)" :class="[tier.featured ? 'bg-violet-500 text-white shadow-sm hover:bg-violet-400 focus-visible:outline-violet-500' : 'text-violet-600 ring-1 ring-inset ring-violet-200 hover:ring-violet-300 focus-visible:outline-violet-600', 'mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10 cursor-pointer']">Commencer maintenant</a>
           </div>
         </div>
       </section>
 
       <!-- Section Témoignages -->
-      <section class="py-16 bg-gray-50">
+      <section class="py-16 bg-purple-50">
         <div class="container mx-auto px-4">
           <h2 class="text-3xl font-bold text-center mb-16">Ce que disent nos clients</h2>
           
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="bg-white p-6 rounded-lg shadow-sm">
               <div class="flex items-center mb-4">
-                <div class="text-yellow-400 flex">
+                <div class="text-amber-400 flex">
                   <Icon type="md-star" size="20" v-for="n in 5" :key="n" />
                 </div>
               </div>
               <p class="text-gray-600 mb-6">"FlapiCMS a complètement transformé notre façon de créer des sites web. Ce qui prenait des semaines ne prend plus que quelques heures. L'interface glisser-déposer est incroyablement intuitive."</p>
               <div class="flex items-center">
-                <div class="h-10 w-10 rounded-full bg-gray-200 mr-3"></div>
+                <div class="h-10 w-10 rounded-full bg-violet-100 mr-3"></div>
                 <div>
                   <p class="font-semibold">Sophie Dupont</p>
                   <p class="text-sm text-gray-500">Directrice Marketing, TechCorp</p>
@@ -193,13 +193,13 @@
             
             <div class="bg-white p-6 rounded-lg shadow-sm">
               <div class="flex items-center mb-4">
-                <div class="text-yellow-400 flex">
+                <div class="text-amber-400 flex">
                   <Icon type="md-star" size="20" v-for="n in 5" :key="n" />
                 </div>
               </div>
               <p class="text-gray-600 mb-6">"La vitesse à laquelle nous pouvons déployer des sites web maintenant est incroyable. Nos clients sont stupéfaits de voir à quelle rapidité nous transformons leurs idées en réalité avec FlapiCMS."</p>
               <div class="flex items-center">
-                <div class="h-10 w-10 rounded-full bg-gray-200 mr-3"></div>
+                <div class="h-10 w-10 rounded-full bg-violet-100 mr-3"></div>
                 <div>
                   <p class="font-semibold">Thomas Bernard</p>
                   <p class="text-sm text-gray-500">PDG, DesignWave</p>
@@ -209,13 +209,13 @@
             
             <div class="bg-white p-6 rounded-lg shadow-sm">
               <div class="flex items-center mb-4">
-                <div class="text-yellow-400 flex">
+                <div class="text-amber-400 flex">
                   <Icon type="md-star" size="20" v-for="n in 5" :key="n" />
                 </div>
               </div>
               <p class="text-gray-600 mb-6">"N'ayant aucune expérience en programmation, FlapiCMS m'a permis de créer un site web professionnel pour mon entreprise sans avoir à engager un développeur. Ça a tout changé pour moi."</p>
               <div class="flex items-center">
-                <div class="h-10 w-10 rounded-full bg-gray-200 mr-3"></div>
+                <div class="h-10 w-10 rounded-full bg-violet-100 mr-3"></div>
                 <div>
                   <p class="font-semibold">Marie Lefevre</p>
                   <p class="text-sm text-gray-500">Propriétaire, Boutique Bloom</p>
@@ -227,11 +227,11 @@
       </section>
 
       <!-- Section CTA -->
-      <section class="py-20 bg-indigo-600 text-white">
+      <section class="py-20 bg-violet-600 text-white">
         <div class="container mx-auto px-4 text-center">
           <h2 class="text-3xl font-bold mb-6">Prêt à créer votre site web ?</h2>
           <p class="text-xl mb-10 max-w-2xl mx-auto">Rejoignez des milliers d'entreprises qui créent des sites web exceptionnels avec FlapiCMS.</p>
-          <Button type="default" size="large" class="bg-white text-indigo-600 hover:bg-gray-100">Commencer votre essai gratuit</Button>
+          <Button type="default" size="large" class="bg-white text-violet-600 hover:bg-gray-100">Commencer votre essai gratuit</Button>
         </div>
       </section>
 
@@ -396,6 +396,8 @@ export default {
   justify-content: center;
   overflow: hidden;
   padding: 0;
+  background-color: #7B68EE;
+  border-color: #7B68EE;
 }
 
 .user-avatar {
@@ -425,7 +427,7 @@ export default {
 }
 
 .toggle-option.active {
-  background-color: #4f46e5;
+  background-color: #7B68EE;
   color: white;
 }
 </style>
