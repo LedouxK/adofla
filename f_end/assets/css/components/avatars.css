@@ -1,0 +1,14 @@
+@layer components {
+    /* Avatar et menu utilisateur */
+    .header-container {
+      @apply flex justify-end p-2 relative;
+    }
+    
+    .user-avatar-button {
+      @apply w-16 h-16 rounded-full border-5 border-black bg-gray-100 cursor-pointer flex items-center justify-center relative p-0.5 m-6 mr-20 mt-6;
+    }
+    
+    .user-avatar-image {
+      @apply w-full h-full rounded-full;
+    }
+  }

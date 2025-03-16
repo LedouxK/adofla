@@ -8,17 +8,11 @@
           <span class="text-black font-extrabold text-xl ml-2">FlapiCMS</span>
         </div>
         <div class="flex items-center">
-          <Dropdown>
-            <Button class="circle-button ml-4" type="primary">
-              <img src="/uploads/profile/default.jpg" alt="Avatar utilisateur" class="user-avatar" />
-            </Button>
-            <template #list>
-              <DropdownMenu>
-                <DropdownItem @click="goToProfile">Profil</DropdownItem>
-                <DropdownItem @click="log_out()">Déconnexion</DropdownItem>
-              </DropdownMenu>
-            </template>
-          </Dropdown>
+          <UserAvatar 
+            :imagePath="`/uploads/profile/${profile.pPic}`" 
+            @profile="goToProfile" 
+            @logout="log_out()" 
+          />
         </div>
       </div>
     </header>
@@ -36,8 +30,12 @@
                 Développez des applications web exceptionnelles avec notre CMS glisser-déposer. Déploiement en quelques secondes, domaine dédié et sécurisation optimale de vos données.
               </p>
               <div class="flex flex-wrap">
-                <Button type="primary" size="large" class="mr-4 mb-4 bg-violet-600 hover:bg-violet-700 border-0">Commencer</Button>
-                <Button type="default" size="large" class="mb-4 border-violet-400 text-violet-600">Voir la démo</Button>
+                <AppButton variant="primary" className="mr-4 mb-4 bg-violet-600 hover:bg-violet-700 border-0" @click="startNow">
+                  Commencer
+                </AppButton>
+                <AppButton variant="secondary" className="mb-4 border-violet-400 text-violet-600" @click="showDemo">
+                  Voir la démo
+                </AppButton>
               </div>
             </div>
             <div class="w-full lg:w-1/2">
@@ -60,37 +58,29 @@
           <h2 class="text-3xl font-bold text-center mb-16">Pourquoi Choisir FlapiCMS ?</h2>
           
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div class="p-6 border border-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <div class="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-violet-100 text-violet-500">
-                <Icon type="ios-move" size="24" />
-              </div>
-              <h3 class="text-xl font-semibold mb-2">Glisser-Déposer</h3>
-              <p class="text-gray-600">Interface intuitive pour créer votre site web sans écrire une seule ligne de code.</p>
-            </div>
+            <FeatureCard 
+              icon="ios-move" 
+              title="Glisser-Déposer" 
+              description="Interface intuitive pour créer votre site web sans écrire une seule ligne de code."
+            />
             
-            <div class="p-6 border border-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <div class="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-violet-100 text-violet-500">
-                <Icon type="md-flash" size="24" />
-              </div>
-              <h3 class="text-xl font-semibold mb-2">Déploiement Instantané</h3>
-              <p class="text-gray-600">Publiez votre site en quelques secondes grâce à notre système de déploiement en un clic.</p>
-            </div>
+            <FeatureCard 
+              icon="md-flash" 
+              title="Déploiement Instantané" 
+              description="Publiez votre site en quelques secondes grâce à notre système de déploiement en un clic."
+            />
             
-            <div class="p-6 border border-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <div class="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-violet-100 text-violet-500">
-                <Icon type="ios-globe" size="24" />
-              </div>
-              <h3 class="text-xl font-semibold mb-2">Domaine Personnalisé</h3>
-              <p class="text-gray-600">Obtenez un domaine dédié gratuit ou connectez facilement votre domaine existant.</p>
-            </div>
+            <FeatureCard 
+              icon="ios-globe" 
+              title="Domaine Personnalisé" 
+              description="Obtenez un domaine dédié gratuit ou connectez facilement votre domaine existant."
+            />
             
-            <div class="p-6 border border-gray-100 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <div class="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-violet-100 text-violet-500">
-                <Icon type="md-lock" size="24" />
-              </div>
-              <h3 class="text-xl font-semibold mb-2">Sécurité des Données</h3>
-              <p class="text-gray-600">Protection de niveau entreprise pour garder vos données importantes en sécurité.</p>
-            </div>
+            <FeatureCard 
+              icon="md-lock" 
+              title="Sécurité des Données" 
+              description="Protection de niveau entreprise pour garder vos données importantes en sécurité."
+            />
           </div>
         </div>
       </section>
@@ -101,35 +91,23 @@
           <h2 class="text-3xl font-bold text-center mb-16">Comment Ça Marche</h2>
           
           <div class="flex flex-wrap -mx-4">
-            <div class="w-full md:w-1/3 px-4 mb-8">
-              <div class="text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-violet-500 text-white mb-6">
-                  <span class="text-xl font-bold">1</span>
-                </div>
-                <h3 class="text-xl font-semibold mb-4">Choisissez les Composants</h3>
-                <p class="text-gray-600">Sélectionnez parmi notre bibliothèque de composants préconçus et glissez-les sur votre page.</p>
-              </div>
-            </div>
+            <StepCard 
+              number="1" 
+              title="Choisissez les Composants" 
+              description="Sélectionnez parmi notre bibliothèque de composants préconçus et glissez-les sur votre page."
+            />
             
-            <div class="w-full md:w-1/3 px-4 mb-8">
-              <div class="text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-violet-500 text-white mb-6">
-                  <span class="text-xl font-bold">2</span>
-                </div>
-                <h3 class="text-xl font-semibold mb-4">Personnalisez le Design</h3>
-                <p class="text-gray-600">Adaptez votre site avec les couleurs, polices et contenus de votre marque.</p>
-              </div>
-            </div>
+            <StepCard 
+              number="2" 
+              title="Personnalisez le Design" 
+              description="Adaptez votre site avec les couleurs, polices et contenus de votre marque."
+            />
             
-            <div class="w-full md:w-1/3 px-4 mb-8">
-              <div class="text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-violet-500 text-white mb-6">
-                  <span class="text-xl font-bold">3</span>
-                </div>
-                <h3 class="text-xl font-semibold mb-4">Publiez Instantanément</h3>
-                <p class="text-gray-600">Cliquez sur publier et votre site est en ligne en quelques secondes avec son propre domaine dédié.</p>
-              </div>
-            </div>
+            <StepCard 
+              number="3" 
+              title="Publiez Instantanément" 
+              description="Cliquez sur publier et votre site est en ligne en quelques secondes avec son propre domaine dédié."
+            />
           </div>
         </div>
       </section>
@@ -147,24 +125,159 @@
 
         <p class="mx-auto mt-6 max-w-2xl text-pretty text-center text-lg font-medium text-gray-600 sm:text-xl/8">Optez pour un forfait abordable qui regroupe les meilleures fonctionnalités pour engager votre audience, fidéliser vos clients et stimuler vos ventes.</p>
         
-        <div class="mx-auto mt-16 mb-16 grid max-w-lg grid-cols-1 items-center gap-y-6 sm:mt-20 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-3">
-          <div v-for="(tier, tierIdx) in subscriptions" :key="tier.id" :class="[tier.featured ? 'relative bg-violet-900 shadow-2xl' : 'bg-white/60 sm:mx-8 lg:mx-0', tier.featured ? '' : tierIdx === 0 ? 'rounded-t-3xl sm:rounded-b-none lg:rounded-bl-3xl lg:rounded-tr-none' : 'sm:rounded-t-none lg:rounded-bl-none lg:rounded-tr-3xl', 'rounded-3xl p-8 ring-1 ring-gray-900/10 sm:p-10']">
-            <h3 :id="tier.id" :class="[tier.featured ? 'text-violet-200' : 'text-violet-600', 'text-base/7 font-semibold']">{{ tier.name }}</h3>
+        <!-- Billing Switch - Seulement pour les plans payants -->
+        <div class="flex justify-center items-center my-12">
+          <span class="mr-3 text-base font-medium" :class="billingPeriod === 'monthly' ? 'text-violet-700' : 'text-gray-500'">Mensuel</span>
+          <div class="relative inline-flex h-8 w-16 items-center rounded-full cursor-pointer" @click="toggleBillingPeriod">
+            <span class="sr-only">Basculer la période de facturation</span>
+            <span :class="[
+              'absolute inset-0 rounded-full transition-colors duration-300 ease-in-out',
+              billingPeriod === 'yearly' ? 'bg-violet-600' : 'bg-gray-200'
+            ]"></span>
+            <span :class="[
+              'inline-block h-6 w-6 transform rounded-full bg-white shadow-md transition-transform duration-300 ease-in-out',
+              billingPeriod === 'yearly' ? 'translate-x-9' : 'translate-x-1'
+            ]"></span>
+          </div>
+          <span class="ml-3 text-base font-medium" :class="billingPeriod === 'yearly' ? 'text-violet-700' : 'text-gray-500'">Annuel</span>
+          <span v-if="billingPeriod === 'yearly'" class="ml-2 -translate-y-1 bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded-full">Économisez 20%</span>
+        </div>
+        
+        <!-- Plans Container - Hauteur fixe pour éviter le décalage -->
+        <div class="mx-auto mt-8 mb-16 grid max-w-lg grid-cols-1 items-stretch gap-y-6 sm:mt-12 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-3" style="min-height: 620px;">
+          <!-- Free Plan (sans option mensuel/annuel) -->
+          <div class="bg-white/60 sm:mx-8 lg:mx-0 rounded-t-3xl sm:rounded-b-none lg:rounded-bl-3xl lg:rounded-tr-none rounded-3xl p-8 ring-1 ring-gray-900/10 sm:p-10 flex flex-col">
+            <h3 class="text-violet-600 text-base/7 font-semibold">Free Plan</h3>
+            
             <p class="mt-4 flex items-baseline gap-x-2">
-              <span :class="[tier.featured ? 'text-white' : 'text-gray-900', 'text-5xl font-semibold tracking-tight']">{{ tier.price }} €</span>
+              <span class="text-gray-900 text-5xl font-semibold tracking-tight">0.00 €</span>
+              <span class="text-gray-500 text-base">/pour toujours</span>
             </p>
-            <p :class="[tier.featured ? 'text-gray-300' : 'text-gray-600', 'mt-6 text-base/7']">{{ tier.description }}</p>
-            <ul role="list" :class="[tier.featured ? 'text-gray-300' : 'text-gray-600', 'mt-8 space-y-3 text-sm/6 sm:mt-10']">
-              <li v-for="feature in tier.features" :key="feature" class="flex gap-x-3">
-                <CheckIcon :class="[tier.featured ? 'text-violet-200' : 'text-violet-600', 'h-6 w-5 flex-none']" aria-hidden="true" />
-                {{ feature }}
+            
+            <p class="text-gray-600 mt-6 text-base/7">
+              Le plan parfait si vous débutez avec notre produit.
+            </p>
+            
+            <ul role="list" class="text-gray-600 mt-8 space-y-3 text-sm/6 sm:mt-10">
+              <li class="flex gap-x-3">
+                <CheckIcon class="text-violet-600 h-6 w-5 flex-none" aria-hidden="true" />
+                25 produits
+              </li>
+              <li class="flex gap-x-3">
+                <CheckIcon class="text-violet-600 h-6 w-5 flex-none" aria-hidden="true" />
+                Jusqu'à 10 000 abonnés
+              </li>
+              <li class="flex gap-x-3">
+                <CheckIcon class="text-violet-600 h-6 w-5 flex-none" aria-hidden="true" />
+                Analyses avancées
+              </li>
+              <li class="flex gap-x-3">
+                <CheckIcon class="text-violet-600 h-6 w-5 flex-none" aria-hidden="true" />
+                Support 24h/24 en 24h
               </li>
             </ul>
-            <div class="toggle-button mt-6">
-              <button @click="tier.subType = 'month'" :class="tier.subType == 'month' ? 'toggle-option active' : 'toggle-option'">Mensuel</button>
-              <button @click="tier.subType = 'year'" :class="tier.subType == 'year' ? 'toggle-option active' : 'toggle-option'">Annuel</button>
+            
+            <div class="mt-auto pt-8">
+              <a href="#" class="text-violet-600 ring-1 ring-inset ring-violet-200 hover:ring-violet-300 focus-visible:outline-violet-600 mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10 cursor-pointer">
+                Commencer maintenant
+              </a>
             </div>
-            <a @click="subscribeToPlan(tier)" :class="[tier.featured ? 'bg-violet-500 text-white shadow-sm hover:bg-violet-400 focus-visible:outline-violet-500' : 'text-violet-600 ring-1 ring-inset ring-violet-200 hover:ring-violet-300 focus-visible:outline-violet-600', 'mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10 cursor-pointer']">Commencer maintenant</a>
+          </div>
+
+          <!-- Pro Plan (avec option mensuel/annuel) -->
+          <div class="relative bg-violet-900 shadow-2xl rounded-3xl p-8 ring-1 ring-gray-900/10 sm:p-10 flex flex-col">
+            <h3 class="text-violet-200 text-base/7 font-semibold">Plan Pro</h3>
+            
+            <p class="mt-4 flex items-baseline gap-x-2">
+              <span class="text-white text-5xl font-semibold tracking-tight">
+                {{ billingPeriod === 'monthly' ? '50.00' : '40.00' }} €
+              </span>
+              <span class="text-gray-400 text-base">
+                /mois
+                <span v-if="billingPeriod === 'yearly'" class="block text-xs text-gray-300">facturé annuellement</span>
+              </span>
+            </p>
+            
+            <p class="text-gray-300 mt-6 text-base/7">
+              Support dédié et infrastructure pour votre entreprise.
+            </p>
+            
+            <ul role="list" class="text-gray-300 mt-8 space-y-3 text-sm/6 sm:mt-10">
+              <li class="flex gap-x-3">
+                <CheckIcon class="text-violet-200 h-6 w-5 flex-none" aria-hidden="true" />
+                Produits illimités
+              </li>
+              <li class="flex gap-x-3">
+                <CheckIcon class="text-violet-200 h-6 w-5 flex-none" aria-hidden="true" />
+                Abonnés illimités
+              </li>
+              <li class="flex gap-x-3">
+                <CheckIcon class="text-violet-200 h-6 w-5 flex-none" aria-hidden="true" />
+                Analyses avancées
+              </li>
+              <li class="flex gap-x-3">
+                <CheckIcon class="text-violet-200 h-6 w-5 flex-none" aria-hidden="true" />
+                Représentant de support dédié
+              </li>
+              <li class="flex gap-x-3">
+                <CheckIcon class="text-violet-200 h-6 w-5 flex-none" aria-hidden="true" />
+                Automatisations marketing
+              </li>
+              <li class="flex gap-x-3">
+                <CheckIcon class="text-violet-200 h-6 w-5 flex-none" aria-hidden="true" />
+                Intégrations personnalisées
+              </li>
+            </ul>
+            
+            <div class="mt-auto pt-8">
+              <a href="#" class="bg-violet-500 text-white shadow-sm hover:bg-violet-400 focus-visible:outline-violet-500 mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10 cursor-pointer">
+                Commencer maintenant
+              </a>
+            </div>
+          </div>
+
+          <!-- Business Plan (avec option mensuel/annuel) -->
+          <div class="bg-white/60 sm:mx-8 lg:mx-0 sm:rounded-t-none lg:rounded-bl-none lg:rounded-tr-3xl rounded-3xl p-8 ring-1 ring-gray-900/10 sm:p-10 flex flex-col">
+            <h3 class="text-violet-600 text-base/7 font-semibold">Plan Business</h3>
+            
+            <p class="mt-4 flex items-baseline gap-x-2">
+              <span class="text-gray-900 text-5xl font-semibold tracking-tight">
+                {{ billingPeriod === 'monthly' ? '100.00' : '80.00' }} €
+              </span>
+              <span class="text-gray-500 text-base">
+                /mois
+                <span v-if="billingPeriod === 'yearly'" class="block text-xs text-gray-500">facturé annuellement</span>
+              </span>
+            </p>
+            
+            <p class="text-gray-600 mt-6 text-base/7">
+              Support et infrastructure dédiés à votre entreprise.
+            </p>
+            
+            <ul role="list" class="text-gray-600 mt-8 space-y-3 text-sm/6 sm:mt-10">
+              <li class="flex gap-x-3">
+                <CheckIcon class="text-violet-600 h-6 w-5 flex-none" aria-hidden="true" />
+                25 produits
+              </li>
+              <li class="flex gap-x-3">
+                <CheckIcon class="text-violet-600 h-6 w-5 flex-none" aria-hidden="true" />
+                Jusqu'à 10 000 abonnés
+              </li>
+              <li class="flex gap-x-3">
+                <CheckIcon class="text-violet-600 h-6 w-5 flex-none" aria-hidden="true" />
+                Analyses avancées
+              </li>
+              <li class="flex gap-x-3">
+                <CheckIcon class="text-violet-600 h-6 w-5 flex-none" aria-hidden="true" />
+                Support 24h/24 en 24h
+              </li>
+            </ul>
+            
+            <div class="mt-auto pt-8">
+              <a href="#" class="text-violet-600 ring-1 ring-inset ring-violet-200 hover:ring-violet-300 focus-visible:outline-violet-600 mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10 cursor-pointer">
+                Commencer maintenant
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -175,53 +288,23 @@
           <h2 class="text-3xl font-bold text-center mb-16">Ce que disent nos clients</h2>
           
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-white p-6 rounded-lg shadow-sm">
-              <div class="flex items-center mb-4">
-                <div class="text-amber-400 flex">
-                  <Icon type="md-star" size="20" v-for="n in 5" :key="n" />
-                </div>
-              </div>
-              <p class="text-gray-600 mb-6">"FlapiCMS a complètement transformé notre façon de créer des sites web. Ce qui prenait des semaines ne prend plus que quelques heures. L'interface glisser-déposer est incroyablement intuitive."</p>
-              <div class="flex items-center">
-                <div class="h-10 w-10 rounded-full bg-violet-100 mr-3"></div>
-                <div>
-                  <p class="font-semibold">Sophie Dupont</p>
-                  <p class="text-sm text-gray-500">Directrice Marketing, TechCorp</p>
-                </div>
-              </div>
-            </div>
+            <TestimonialCard 
+              quote="FlapiCMS a complètement transformé notre façon de créer des sites web. Ce qui prenait des semaines ne prend plus que quelques heures. L'interface glisser-déposer est incroyablement intuitive."
+              author="Sophie Dupont"
+              role="Directrice Marketing, TechCorp"
+            />
             
-            <div class="bg-white p-6 rounded-lg shadow-sm">
-              <div class="flex items-center mb-4">
-                <div class="text-amber-400 flex">
-                  <Icon type="md-star" size="20" v-for="n in 5" :key="n" />
-                </div>
-              </div>
-              <p class="text-gray-600 mb-6">"La vitesse à laquelle nous pouvons déployer des sites web maintenant est incroyable. Nos clients sont stupéfaits de voir à quelle rapidité nous transformons leurs idées en réalité avec FlapiCMS."</p>
-              <div class="flex items-center">
-                <div class="h-10 w-10 rounded-full bg-violet-100 mr-3"></div>
-                <div>
-                  <p class="font-semibold">Thomas Bernard</p>
-                  <p class="text-sm text-gray-500">PDG, DesignWave</p>
-                </div>
-              </div>
-            </div>
+            <TestimonialCard 
+              quote="La vitesse à laquelle nous pouvons déployer des sites web maintenant est incroyable. Nos clients sont stupéfaits de voir à quelle rapidité nous transformons leurs idées en réalité avec FlapiCMS."
+              author="Thomas Bernard"
+              role="PDG, DesignWave"
+            />
             
-            <div class="bg-white p-6 rounded-lg shadow-sm">
-              <div class="flex items-center mb-4">
-                <div class="text-amber-400 flex">
-                  <Icon type="md-star" size="20" v-for="n in 5" :key="n" />
-                </div>
-              </div>
-              <p class="text-gray-600 mb-6">"N'ayant aucune expérience en programmation, FlapiCMS m'a permis de créer un site web professionnel pour mon entreprise sans avoir à engager un développeur. Ça a tout changé pour moi."</p>
-              <div class="flex items-center">
-                <div class="h-10 w-10 rounded-full bg-violet-100 mr-3"></div>
-                <div>
-                  <p class="font-semibold">Marie Lefevre</p>
-                  <p class="text-sm text-gray-500">Propriétaire, Boutique Bloom</p>
-                </div>
-              </div>
-            </div>
+            <TestimonialCard 
+              quote="N'ayant aucune expérience en programmation, FlapiCMS m'a permis de créer un site web professionnel pour mon entreprise sans avoir à engager un développeur. Ça a tout changé pour moi."
+              author="Marie Lefevre"
+              role="Propriétaire, Boutique Bloom"
+            />
           </div>
         </div>
       </section>
@@ -231,7 +314,9 @@
         <div class="container mx-auto px-4 text-center">
           <h2 class="text-3xl font-bold mb-6">Prêt à créer votre site web ?</h2>
           <p class="text-xl mb-10 max-w-2xl mx-auto">Rejoignez des milliers d'entreprises qui créent des sites web exceptionnels avec FlapiCMS.</p>
-          <Button type="default" size="large" class="bg-white text-violet-600 hover:bg-gray-100">Commencer votre essai gratuit</Button>
+          <AppButton variant="secondary" className="bg-white text-violet-600 hover:bg-gray-100" @click="startFreeTrial">
+            Commencer votre essai gratuit
+          </AppButton>
         </div>
       </section>
 
@@ -296,10 +381,25 @@ import { CheckIcon } from '@heroicons/vue/20/solid'
 <script>
 import axiosInstance from '@/utils/axios';
 import { log_out } from '@/utils/auth';
+import UserAvatar from '@/components/ui/UserAvatar.vue';
+import AppButton from '@/components/ui/AppButton.vue';
+import SubscriptionCard from '@/components/cards/SubscriptionCard.vue';
+import FeatureCard from '@/components/cards/FeatureCard.vue';
+import StepCard from '@/components/cards/StepCard.vue';
+import TestimonialCard from '@/components/cards/TestimonialCard.vue';
 
 export default {
+  components: {
+    UserAvatar,
+    AppButton,
+    SubscriptionCard,
+    FeatureCard,
+    StepCard,
+    TestimonialCard
+  },
   data() {
     return {
+      billingPeriod: 'monthly',
       subscriptions: [],
       profile: {
         name: "",
@@ -310,6 +410,17 @@ export default {
     };
   },
   methods: {
+    toggleBillingPeriod() {
+      this.billingPeriod = this.billingPeriod === 'monthly' ? 'yearly' : 'monthly';
+      
+      // Notification de l'économie réalisée
+      if (this.billingPeriod === 'yearly') {
+        this.$Notice.success({
+          title: 'Économie de 20%',
+          desc: 'Profitez de notre tarif préférentiel en choisissant un abonnement annuel.'
+        });
+      }
+    },
     async fetchSubscriptions() {
       try {
         const response = await axiosInstance.get('/api/subscriptions');
@@ -323,7 +434,8 @@ export default {
               'Analyses avancées', 
               'Support 24h/24 en 24h'
             ];
-            element.subType = 'month'
+            element.monthlyPrice = element.price;
+            element.yearlyPrice = (element.price * 0.8 * 12).toFixed(2);
           } else {
             element.featured = true;
             element.features = [
@@ -334,7 +446,8 @@ export default {
               'Automatisations marketing',
               'Intégrations personnalisées',
             ];
-            element.subType = 'month'
+            element.monthlyPrice = element.price;
+            element.yearlyPrice = (element.price * 0.8 * 12).toFixed(2);
           }
         });
       } catch (error) {
@@ -347,9 +460,30 @@ export default {
     goToProfile() {
       this.$router.push('/profile');
     },
+    startNow() {
+      // Logique pour démarrer
+      this.$Notice.info({
+        title: 'Bientôt disponible',
+        desc: 'Cette fonctionnalité sera disponible prochainement.'
+      });
+    },
+    showDemo() {
+      // Logique pour afficher la démo
+      this.$Notice.info({
+        title: 'Démo',
+        desc: 'La démo sera disponible prochainement.'
+      });
+    },
+    startFreeTrial() {
+      // Logique pour démarrer l'essai gratuit
+      this.$Notice.info({
+        title: 'Essai gratuit',
+        desc: 'L\'essai gratuit sera disponible prochainement.'
+      });
+    },
     log_out,
-    async subscribeToPlan(plan) {
-      if (!plan.subType) {
+    async subscribeToPlan({ id, type }) {
+      if (!type) {
         this.$Notice.info({
           title: 'Sélectionnez un type!',
         });
@@ -357,8 +491,8 @@ export default {
       }
       try {
         const response = await axiosInstance.post('/api/subscribe', {
-          subscription_id: plan.id,
-          type: plan.subType,
+          subscription_id: id,
+          type: type,
         });
 
         if (response.data.success) {
@@ -387,47 +521,24 @@ export default {
 <style scoped>
 @import '@/assets/subscription/style.css';
 
-.circle-button {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  padding: 0;
-  background-color: #7B68EE;
-  border-color: #7B68EE;
+/* Animation du switch */
+@keyframes toggleOn {
+  0% { transform: translateX(1px); }
+  50% { transform: translateX(6px); }
+  100% { transform: translateX(9px); }
 }
 
-.user-avatar {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+@keyframes toggleOff {
+  0% { transform: translateX(9px); }
+  50% { transform: translateX(6px); }
+  100% { transform: translateX(1px); }
 }
 
-.toggle-button {
-  display: flex;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  overflow: hidden;
+.translate-x-9 {
+  animation: toggleOn 0.3s ease-in-out;
 }
 
-.toggle-option {
-  flex: 1;
-  padding: 0.5rem;
-  text-align: center;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #6b7280;
-  transition: all 0.2s;
-}
-
-.toggle-option.active {
-  background-color: #7B68EE;
-  color: white;
+.translate-x-1 {
+  animation: toggleOff 0.3s ease-in-out;
 }
 </style>

@@ -1,0 +1,18 @@
+@layer components {
+    /* Toggle buttons */
+    .toggle-container {
+      @apply flex rounded-md mt-4 overflow-hidden;
+    }
+    
+    .toggle-option {
+      @apply py-2 px-4 flex-1 text-center cursor-pointer transition-colors;
+    }
+    
+    .toggle-option--active {
+      @apply bg-indigo-500 text-white;
+    }
+    
+    .toggle-option--inactive {
+      @apply bg-white text-gray-700 hover:bg-gray-100;
+    }
+  }

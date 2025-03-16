@@ -1,0 +1,70 @@
+@layer components {
+    /* Cartes d'abonnement */
+    .subscription-card {
+      @apply rounded-3xl p-8 ring-1 ring-gray-900/10 sm:p-10;
+    }
+    
+    .subscription-card--featured {
+      @apply relative bg-gray-900 shadow-2xl;
+    }
+    
+    .subscription-card--regular {
+      @apply bg-white/60 sm:mx-8 lg:mx-0;
+    }
+    
+    .card-title {
+      @apply text-base/7 font-semibold;
+    }
+    
+    .card-title--featured {
+      @apply text-indigo-400;
+    }
+    
+    .card-title--regular {
+      @apply text-indigo-600;
+    }
+    
+    .card-price {
+      @apply mt-4 flex items-baseline gap-x-2;
+    }
+    
+    .price-amount {
+      @apply text-5xl font-semibold tracking-tight;
+    }
+    
+    .price-amount--featured {
+      @apply text-white;
+    }
+    
+    .price-amount--regular {
+      @apply text-gray-900;
+    }
+    
+    .card-description {
+      @apply mt-6 text-base/7;
+    }
+    
+    .card-description--featured {
+      @apply text-gray-300;
+    }
+    
+    .card-description--regular {
+      @apply text-gray-600;
+    }
+    
+    .feature-list {
+      @apply mt-8 space-y-3 text-sm/6 sm:mt-10;
+    }
+    
+    .feature-list--featured {
+      @apply text-gray-300;
+    }
+    
+    .feature-list--regular {
+      @apply text-gray-600;
+    }
+    
+    .feature-item {
+      @apply flex gap-x-3;
+    }
+  }
