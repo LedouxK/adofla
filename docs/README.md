@@ -1,97 +1,166 @@
-# Plan de Tests Complet - Documentation
 
-## 📚 Vue d'Ensemble
+# FlapiCMS - Subscription Management System
 
-Cette documentation détaille l'ensemble des stratégies de test pour notre application Nuxt.js/AdonisJS. Elle couvre les tests frontend, backend, performance et sécurité.
+FlapiCMS est une plateforme de gestion d'abonnements développée avec Nuxt.js pour le frontend et AdonisJS pour le backend.
 
-## 📂 Structure de la Documentation
+## Prérequis
 
-```
-/docs
-├── README.md                # Ce fichier - Vue d'ensemble
-├── 01_Introduction.md       # Contexte et objectifs
-├── 02_Frontend.md           # Tests Frontend (Nuxt)
-│   ├── 02_1_Unitaires.md    # Tests unitaires
-│   ├── 02_2_Integration.md  # Tests d'intégration
-│   └── 02_3_E2E.md         # Tests End-to-End
-├── 03_Backend.md            # Tests Backend (AdonisJS)
-│   ├── 03_1_Unitaires.md    # Tests unitaires
-│   ├── 03_2_Integration.md  # Tests d'intégration
-│   ├── 03_3_Performance.md  # Tests de performance
-│   └── 03_4_Securite.md    # Tests de sécurité
-└── 04_CI_CD.md             # Intégration continue
-```
+- Node.js (version 22 ou supérieure)
+- npm 
+- Docker et Docker Compose (pour la base de données)
 
-## 🎯 Objectifs de Couverture
+## Configuration et Installation
 
-- Frontend : 100% de couverture sur les composants critiques
-- Backend : 100% de couverture sur les contrôleurs et services
-- E2E : Couverture complète des parcours utilisateur principaux
-- Performance : Benchmarks définis pour chaque API critique
+### 1. Cloner le dépôt
 
-## 🛠️ Technologies Utilisées
-
-### Frontend
-- `@vue/test-utils` pour les tests unitaires
-- `vitest` comme framework de test
-- `cypress` pour les tests E2E
-
-### Backend
-- `@japa/runner` pour les tests unitaires et d'intégration
-- `artillery` pour les tests de performance
-- `supertest` pour les tests d'API
-
-## 📝 Guide Rapide
-
-1. **Installation des Dépendances**
 ```bash
-# Frontend
-npm install --save-dev @vue/test-utils vitest cypress
-
-# Backend
-npm install --save-dev @japa/runner artillery supertest
+git clone [URL_DU_DÉPÔT]
+cd flapicms
 ```
 
-2. **Exécution des Tests**
+### 2. Lancer la base de données avec Docker
+
 ```bash
-# Tests unitaires
-npm run test:unit
-
-# Tests E2E
-npm run test:e2e
-
-# Tests API
-npm run test:api
-
-# Tous les tests
-npm run test
+docker-compose up -d
 ```
 
-## 📚 Navigation
+Cette commande lancera les conteneurs MySQL et phpMyAdmin définis dans le fichier `docker-compose.yml`.
+- MySQL sera accessible sur le port 3310
+- phpMyAdmin sera accessible sur http://localhost:8090
+- Base de données: flapicms7
+- La base de données sera initialisée avec le fichier `db_dump.sql`
 
-- [Introduction](./01_Introduction.md)
-- [Frontend](./02_Frontend.md)
-  - [Tests Unitaires](./02_Frontend/02_1_Unitaires.md)
-  - [Tests d'Intégration](./02_Frontend/02_2_Integration.md)
-  - [Tests E2E](./02_Frontend/02_3_E2E.md)
-- [Backend](./03_Backend.md)
-  - [Tests Unitaires](./03_Backend/03_1_Unitaires.md)
-  - [Tests d'Intégration](./03_Backend/03_2_Integration.md)
-  - [Tests de Performance](./03_Backend/03_3_Performance.md)
-  - [Tests de Sécurité](./03_Backend/03_4_Securite.md)
-- [CI/CD](./04_CI_CD.md)
+Si vous souhaitez réinitialiser la base de données:
+```bash
+docker-compose down -v
+docker-compose up -d
+```
 
-## 🤝 Contribution
+### 3. Configuration du Backend (AdonisJS)
 
-Pour contribuer à la documentation des tests :
-1. Créez une branche pour vos modifications
-2. Suivez les conventions de nommage existantes
-3. Incluez des exemples concrets
-4. Soumettez une pull request
+```bash
+cd b_end
+npm install
+```
 
-## 📅 Maintenance
+Configurer le fichier d'environnement:
+```bash
+cp .env.example .env
+```
 
-La documentation est mise à jour :
-- À chaque nouvelle fonctionnalité majeure
-- Lors des changements dans la stratégie de test
-- Au minimum une fois par sprint 
+Modifier le fichier `.env` avec les paramètres de connexion à la base de données:
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3310
+DB_USER=admin
+DB_PASSWORD=admin_password
+DB_DATABASE=flapicms7
+```
+
+Lancer les migrations et les seeders (si nécessaire):
+```bash
+node ace migration:run
+node ace db:seed
+```
+
+Démarrer le serveur backend:
+```bash
+npm run dev
+```
+
+Le serveur backend sera disponible sur http://localhost:3333
+
+### 4. Configuration du Frontend
+
+```bash
+cd f_end
+npm install
+```
+
+### 5. Lancer le Frontend
+
+```bash
+npm run dev
+```
+
+L'application Frontend sera disponible sur http://localhost:3000
+
+### 5. Arrêter le serveur
+
+Pour arrêter le serveur de développement, appuyez sur `Ctrl+C` dans le terminal.
+
+## Structure du Projet
+
+- `f_end/` - Code source du frontend (Nuxt.js)
+- `components/` - Composants Vue réutilisables
+- `pages/` - Routes et pages de l'application
+- `store/` - Gestion d'état avec Pinia
+- `utils/` - Fonctions utilitaires
+- `assets/` - Ressources statiques (CSS, images, etc.)
+
+## Fonctionnalités Principales
+
+1. **Authentification**
+   - Connexion/Déconnexion
+   - Récupération de mot de passe
+   - Changement de mot de passe
+
+2. **Gestion des abonnements**
+   - Visualisation des abonnements actifs
+   - Souscription à de nouveaux plans
+   - Modification des abonnements existants
+
+3. **Profil utilisateur**
+   - Modification des informations personnelles
+   - Gestion de la photo de profil
+
+4. **Administration**
+   - Gestion des utilisateurs
+   - Gestion des plans d'abonnement
+
+## Utilisateurs par défaut
+
+- **Admin**: admin@flapi.com / password
+- **Utilisateur**: user@flapi.com / password
+
+## Détails de la base de données
+
+La base de données MySQL contient les tables suivantes:
+- `users` - Informations sur les utilisateurs
+- `subscriptions` - Plans d'abonnement disponibles
+- `user_subscriptions` - Abonnements souscrits par les utilisateurs
+- `roles` - Rôles utilisateur (admin, utilisateur)
+- `password_reset_tokens` - Jetons pour la réinitialisation des mots de passe
+
+Pour accéder directement à la base de données:
+```bash
+docker exec -it flapi_cms_mysql_experience mysql -u admin -padmin_password flapicms7
+```
+
+Si vous devez restaurer manuellement la base de données:
+```bash
+docker exec -i flapi_cms_mysql_experience mysql -u admin -padmin_password flapicms7 < db_dump.sql
+```
+
+## Accès phpMyAdmin
+
+- URL: http://localhost:8090
+- Serveur: mysql
+- Utilisateur: admin
+- Mot de passe: admin_password
+
+## Dépannage
+
+- **Problème de connexion à la base de données** : Vérifiez que Docker est en cours d'exécution et que les conteneurs sont actifs avec `docker ps`.
+- **Port déjà utilisé** : Si le port 3000 est déjà utilisé, arrêtez l'application qui utilise ce port ou configurez l'application pour utiliser un port différent.
+- **Erreurs de dépendances** : Essayez de supprimer le dossier `node_modules` et de réinstaller avec `npm install`.
+- **Problèmes d'API** : Vérifiez que le backend tourne bien sur le port 3333. Si c'est un autre port, modifiez la variable `axiosBase` dans le frontend.
+- **Erreurs CORS** : Si vous rencontrez des erreurs CORS, vérifiez la configuration dans le fichier `cors.js` du backend.
+- **Problèmes de sessions** : Essayez de vider le localStorage du navigateur.
+
+## Ressources supplémentaires
+
+- [Documentation Nuxt.js](https://nuxt.com/docs)
+- [Documentation View UI Plus](https://www.iviewui.com/view-ui-plus/guide/introduce)
+- [Documentation Tailwind CSS](https://tailwindcss.com/docs)
