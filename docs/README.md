@@ -5,7 +5,7 @@ FlapiCMS est une plateforme de gestion d'abonnements développée avec Nuxt.js p
 
 ## Prérequis
 
-- Node.js (version 16 ou supérieure)
+- Node.js (version 22 ou supérieure)
 - npm ou yarn
 - Docker et Docker Compose (pour la base de données)
 
