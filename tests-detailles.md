@@ -42,12 +42,7 @@
   - Test des getters
   - Test de la persistance des données
 
-#### 3. Utils/Helpers
-- **Formatters**
-  - Test de formatage des dates
-  - Test de formatage des nombres
-  - Test de formatage des devises
-  - Test des traductions
+#
 
 - **Validators**
   - Test des validations d'email
@@ -75,26 +70,11 @@
   - Changement de mot de passe
   - Suppression de compte
 
-#### 2. Interactions API
-- **Requêtes HTTP**
-  - Test des intercepteurs
-  - Gestion des erreurs réseau
-  - Test des retry mechanisms
-  - Test des timeouts
-
-- **Cache**
-  - Test de la mise en cache
-  - Test de l'invalidation du cache
-  - Test de la persistance
 
 ### Tests E2E (Cypress/Playwright)
 
 #### 1. Scénarios Critiques
-- **Parcours d'Achat**
-  - Ajout au panier
-  - Processus de checkout
-  - Paiement
-  - Confirmation de commande
+
 
 - **Gestion de Compte**
   - Création de compte
@@ -102,11 +82,6 @@
   - Historique des commandes
   - Gestion des adresses
 
-#### 2. Tests Cross-Browser
-- Chrome
-- Firefox
-- Safari
-- Edge
 
 ## Backend (AdonisJS)
 

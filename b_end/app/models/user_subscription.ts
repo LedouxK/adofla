@@ -35,11 +35,10 @@ export default class UserSubscription extends BaseModel {
     foreignKey: 'id',
   })
   declare user: HasOne<typeof User>
-  
+
   @hasOne(() => Subscription, {
     localKey: 'subscription_id',
     foreignKey: 'id',
   })
   declare subscription: HasOne<typeof Subscription>
-
 }
