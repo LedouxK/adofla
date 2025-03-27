@@ -156,7 +156,7 @@ export default class UsersController {
   // Get a list of all users
   public async index({ request }: HttpContext) {
     const page = request.input('page', 1)
-    const perPage = request.input('perPage')
+    const perPage = request.input('per_page')
 
     if (perPage > 0) {
       return await User.query().preload('userRole').paginate(page, perPage)
