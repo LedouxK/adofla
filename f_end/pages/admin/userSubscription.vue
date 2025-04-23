@@ -4,18 +4,17 @@
             <!--begin::Container-->
             <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
                 <!--begin::Page title-->
-                <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
-                    data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
-                    class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-                    <!--begin::Title-->
-                    <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Users Subscribtion
-
-                        <!-- <Button class="mx-1" @click="addModalOn" :size="'large'" icon="md-add" type="primary"
-                            shape="circle"></Button> -->
-                        <Button class="mx-4" @click="addModalOn" type="primary">Add+</Button>
-                    </h1>
-                    <!--end::Title-->
-                </div>
+                <div class="flex items-center mb-3 md:mb-0">
+          <h1 class="text-2xl font-bold text-gray-800 dark:text-white">
+            Gestion des abonnements
+            <button 
+              @click="addModalOn" 
+              class="ml-2 py-1 px-3 bg-[#7B68EE] hover:bg-[#6A5ACD] text-white text-sm font-medium rounded transition duration-200"
+            >
+              Ajouter un abonnement
+            </button>
+          </h1>
+        </div>
                 <!--end::Page title-->
                 <!--begin::Actions-->
                 <div class="d-flex align-items-center py-1">
