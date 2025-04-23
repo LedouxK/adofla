@@ -376,7 +376,6 @@ INSERT INTO `users` (`id`, `role_id`, `email`, `password`, `created_at`, `update
 (11, 2, 'admixxn@gmail.com', '$scrypt$n=16384,r=8,p=1$uY9yotquOlNnHgiKCjyA/w$8vGvb+8sP76fqHzAulAG3wlNAFcb2ntWLUVBQkMOqpmQ/vbJ3QxaVHoMscSzRzLFjrptXT1/d6P9kKbcDA/HvQ', '2024-12-05 04:32:23', '2024-12-05 04:32:23'),
 (12, 2, 'adminddd@gmail.com', '$scrypt$n=16384,r=8,p=1$l49cvYxreqT++4AaUqbDhA$IT+XYRMQsVoZEIrOuKtgSSRu3++0O9GBEJI9isqB0/j3heAvT+/0Ruz+OyIiQeh7a7Ky4EGF4NGi4+9Jrd0k8g', '2024-12-05 10:38:35', '2024-12-05 04:38:35'),
 (14, 2, 'admin77@gmail.com', '$scrypt$n=16384,r=8,p=1$bE0ePBkzw3t09aqfHtmDgg$qepbm+9sKHM/JsC5L+Wnj+PY9MkYtLj/x2cda/I3QsOaYyz8nl2CVW3/CV4RKFrGrWU4ufdGv+JMb6BaB3tfFw', '2024-12-05 04:56:11', '2024-12-05 04:56:11'),
-(15, 1, 'biprobhowmik5@gmail.com', '$scrypt$n=16384,r=8,p=1$Gvpk8HG/eDPL/uw0R2bwUg$i6gZmnaOf+wiK0l+96f9rM/OqJDyH4Qnkdi5+UDMZOuQrlOKwypS98oLquLZn4ym96reEkE2ZL2PeANAvsHhRw', '2024-12-15 05:51:40', '2024-12-14 23:51:40'),
 (16, 2, 'xyz@gma.com', '$scrypt$n=16384,r=8,p=1$nY0TVXzpnYXQKZVPzXA0GA$qWJuXA2K8u3faxE+7j6DgEyTgPxgzpaTKAJt+BYSUN05xgu1OQTLePNxLHD+Q6tRZnJSUxmzJTjVhkZ+nyu+cQ', '2024-12-16 06:54:30', '2024-12-16 06:54:30');
 
 -- --------------------------------------------------------

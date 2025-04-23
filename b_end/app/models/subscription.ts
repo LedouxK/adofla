@@ -11,12 +11,6 @@ export default class Subscription extends BaseModel {
   @column()
   declare price: number
 
-  // @column()
-  // declare durationValue: number // Numeric value
-
-  // @column()
-  // declare durationUnit: string // Unit (e.g., day, month, year)
-
   @column()
   declare description: string
 
