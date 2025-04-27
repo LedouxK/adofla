@@ -375,8 +375,13 @@ export default {
         });
 
         if (response.data.success) {
+          // Vérifier si c'est un nouvel abonnement ou un changement d'abonnement
+          const message = response.data.changed 
+            ? 'Votre abonnement a été modifié avec succès!' 
+            : 'Abonnement réussi!';
+            
           this.$Notice.success({
-            title: 'Abonnement réussi!',
+            title: message,
           });
         } else {
           this.$Notice.error({

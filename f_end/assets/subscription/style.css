@@ -285,3 +285,39 @@ body {
     --baseSize: 14px;
   }
 }
+
+/* Styles pour les boutons toggle */
+.toggle-button {
+  display: flex;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.toggle-option {
+  flex: 1;
+  text-align: center;
+  padding: 8px 16px;
+  cursor: pointer;
+  background-color: #f9fafb;
+  color: #6b7280;
+  transition: all 0.2s ease;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.toggle-option:first-child {
+  border-right: 1px solid #e5e7eb;
+}
+
+.toggle-option.active {
+  background-color: #4f46e5;
+  color: white;
+}
+
+.toggle-option:hover:not(.active) {
+  background-color: #e5e7eb;
+}

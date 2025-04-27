@@ -77,8 +77,18 @@ export default class UserSubscriptionsController {
       .where('status', 'active')
       .first()
 
+    // Si l'utilisateur a déjà un abonnement actif, on le désactive avant d'en créer un nouveau
     if (existing) {
-      return response.badRequest({ message: 'Vous avez déjà un abonnement actif.' })
+      // Si l'utilisateur essaie de s'abonner au même forfait qu'il a déjà
+      if (existing.subscription_id === subscriptionId && existing.type === type) {
+        return response.badRequest({ 
+          message: 'Vous êtes déjà abonné à ce forfait.' 
+        })
+      }
+
+      // Désactiver l'ancien abonnement
+      existing.status = 'inactive'
+      await existing.save()
     }
 
     const plan = await Subscription.find(subscriptionId)
@@ -102,7 +112,12 @@ export default class UserSubscriptionsController {
       status: 'active',
     })
 
-    return response.ok({ success: true, subscription: userSub })
+    // Indiquer si c'était un changement d'abonnement ou un nouvel abonnement
+    return response.ok({ 
+      success: true, 
+      subscription: userSub,
+      changed: existing ? true : false 
+    })
   }
 
   public async updateSubscription({ request, auth, response }: HttpContextContract) {

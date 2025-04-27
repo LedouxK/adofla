@@ -108,29 +108,15 @@
                                 {{ feature }}
                             </li>
                         </ul>
-                        <div class="subscription-options">
-                            <h4>Choisissez le type d'abonnement</h4>
-                            <div class="toggle-button">
-                                <button 
-                                    @click="tier.subType = 'month'" 
-                                    :class="tier.subType === 'month' ? 'toggle-option active' : 'toggle-option'">
-                                    Mensuel
-                                </button>
-                                <button 
-                                    @click="tier.subType = 'year'" 
-                                    :class="tier.subType === 'year' ? 'toggle-option active' : 'toggle-option'">
-                                    Annuel
-                                </button>
+                        <div>
+                            <p>Choisissez le type d'abonnement</p>
+                            <div class="toggle-button mt-2">
+                                <button @click="tier.subType = 'month'" :class="tier.subType === 'month' ? 'toggle-option active' : 'toggle-option'">Mensuel</button>
+                                <button @click="tier.subType = 'year'" :class="tier.subType === 'year' ? 'toggle-option active' : 'toggle-option'">Annuel</button>
                             </div>
-
-                            <h4>Choisissez la durée de l'abonnement</h4>
-                            <select v-model="tier.duration" class="duration-select">
-                                <option value="1">1 mois</option>
-                                <option value="3">3 mois</option>
-                                <option value="6">6 mois</option>
-                                <option value="12">12 mois</option>
-                            </select>
                         </div>
+
+
 
                         <a 
                             @click="updateSubscription(tier)"
@@ -333,28 +319,42 @@ export default {
         // Update subscription
         async updateSubscription(new_sub) {
             if (!new_sub.subType) {
-                // this.$Message.info('Select Type!');
                 this.$Notice.info({
-                    title: 'Select Type!',
-                    // desc: nodesc ? '' : 'Here is the notification description. Here is the notification description. '
+                    title: 'Veuillez sélectionner un type d\'abonnement!',
                 });
                 return
             }
-            this.updateSubscriptionObj.type = new_sub.subType
-            this.updateSubscriptionObj.new_sub_id = new_sub.id
-            if (!this.updateSubscriptionObj.new_sub_id || !this.updateSubscriptionObj.old_sub_id) return;
-
+            
             this.loading = true;
             try {
-                await axiosInstance.post('/api/updateSubscription', this.updateSubscriptionObj);
-                this.$Notice.success({
-                    title: 'Successfully Updated',
-                    // desc: nodesc ? '' : 'Here is the notification description. Here is the notification description. '
+                // Utiliser l'API subscribe directement, comme sur la page d'accueil
+                // Cette API gère maintenant automatiquement le changement d'abonnement
+                const response = await axiosInstance.post('/api/subscribe', {
+                    subscription_id: new_sub.id,
+                    type: new_sub.subType === 'month' ? 'monthly' : 'yearly'
                 });
-                this.loadInitials();
-                this.addModal = false;
+                
+                if (response.data.success) {
+                    // Message personnalisé selon qu'il s'agit d'un changement ou d'un nouvel abonnement
+                    const message = response.data.changed 
+                        ? 'Votre abonnement a été modifié avec succès!' 
+                        : 'Abonnement réussi!';
+                        
+                    this.$Notice.success({
+                        title: message,
+                    });
+                    this.loadInitials();
+                    this.addModal = false;
+                } else {
+                    this.$Notice.error({
+                        title: response.data.message ? response.data.message : "L'abonnement a échoué. Veuillez réessayer.",
+                    });
+                }
             } catch (error) {
-                console.error("Error updating subscription:", error);
+                console.error("Erreur lors de la modification de l'abonnement:", error);
+                this.$Notice.error({
+                    title: "Une erreur s'est produite lors du traitement de votre demande.",
+                });
             } finally {
                 this.loading = false;
             }
