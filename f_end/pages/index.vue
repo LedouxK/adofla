@@ -112,51 +112,11 @@
         </div>
       </section>
 
-      <!-- Section Tarifs (Votre Section Originale) -->
-      <section class="py-16 bg-white">
-        <div class="absolute inset-x-0 -top-3 -z-10 transform-gpu overflow-hidden px-36 blur-3xl mb-10" aria-hidden="true">
-          <div class="mx-auto aspect-[1155/678] w-[72.1875rem] bg-gradient-to-tr from-violet-300 to-violet-500 opacity-30" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
-        </div>
-
-        <div class="mx-auto max-w-4xl text-center">
-          <h2 class="text-lg font-semibold text-violet-600">Tarifs</h2>
-          <p class="mt-4 text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">Choisissez le forfait adapté à vos besoins</p>
-        </div>
-
-        <p class="mx-auto mt-6 max-w-2xl text-pretty text-center text-lg font-medium text-gray-600 sm:text-xl/8">Optez pour un forfait abordable qui regroupe les meilleures fonctionnalités pour engager votre audience, fidéliser vos clients et stimuler vos ventes.</p>
-        
-        <!-- Espace supplémentaire après le titre -->
-        <div class="h-10"></div>
-        
-        <!-- Plans Container - Hauteur fixe pour éviter le décalage -->
-        <div class="mx-auto mt-8 mb-16 grid max-w-lg grid-cols-1 items-stretch gap-y-6 sm:mt-12 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-3" style="min-height: 620px;">
-          <!-- Plans organisés par ordre de priorité souhaité -->
-          <!-- Free Plan (toujours en premier) -->
-          <SubscriptionCard
-            v-if="getFreePlan"
-            :key="getFreePlan.id"
-            :tier="getFreePlan"
-            :tierIdx="0"
-            @subscribe="subscribeToPlan"
-          />
-          <!-- Mid-Tier Plan (maintenant en deuxième) -->
-          <SubscriptionCard
-            v-if="getMidTierPlan"
-            :key="getMidTierPlan.id"
-            :tier="getMidTierPlan"
-            :tierIdx="1"
-            @subscribe="subscribeToPlan"
-          />
-          <!-- Premium Plan (maintenant en troisième) -->
-          <SubscriptionCard
-            v-if="getPremiumPlan"
-            :key="getPremiumPlan.id"
-            :tier="getPremiumPlan"
-            :tierIdx="2"
-            @subscribe="subscribeToPlan"
-          />
-        </div>
-      </section>
+      <!-- Section Tarifs - Version Modulaire -->
+      <PricingSection 
+        :subscriptions="subscriptions" 
+        @subscribe="subscribeToPlan"
+      />
 
       <!-- Section Témoignages -->
       <section class="py-16 bg-purple-50">
@@ -252,6 +212,7 @@
 
 <script setup>
 import { CheckIcon } from '@heroicons/vue/20/solid'
+import PricingSection from '@/components/sections/Pricing/PricingSection.vue'
 </script>
 
 <script>
@@ -288,34 +249,69 @@ export default {
     // Optimisé pour meilleures performances
     async fetchSubscriptions() {
       try {
-        // Définissons ces fonctionnalités en dehors de la boucle pour éviter de recréer des tableaux
-        const regularFeatures = [
-          '25 produits', 
-          "Jusqu'à 10 000 abonnés", 
-          'Analyses avancées', 
-          'Support 24h/24 en 24h'
+        // Définissons les fonctionnalités pour chaque niveau d'abonnement avec une progression logique
+        const freeFeatures = [
+          "Jusqu'à 25 produits", 
+          "Jusqu'à 5 000 visiteurs par mois",
+          "Galerie d'images standard",
+          "Modèles de site de base",
+          "Support par email (48h)",
+          "Sauvegardes hebdomadaires"
         ];
         
-        const featuredFeatures = [
-          'Produits illimités',
-          'Abonnés illimités',
-          'Analyses avancées',
-          'Représentant de support dédié',
-          'Automatisations marketing',
-          'Intégrations personnalisées',
+        const midTierFeatures = [
+          "Toutes les fonctionnalités de l'offre Gratuite",
+          "Jusqu'à 100 produits",
+          "Jusqu'à 50 000 visiteurs par mois",
+          "Galerie d'images premium",
+          "Tous les modèles de site disponibles",
+          "Support prioritaire par email (24h)",
+          "Sauvegardes quotidiennes",
+          "Statistiques avancées",
+          "Personnalisation avancée"
+        ];
+        
+        const premiumFeatures = [
+          "Toutes les fonctionnalités de l'offre Mid-Tier",
+          "Produits illimités",
+          "Visiteurs illimités",
+          "Représentant de support dédié",
+          "Automatisations marketing personnalisées",
+          "Intégrations API avancées",
+          "Sauvegardes en temps réel",
+          "Analyses prédictives",
+          "Optimisation SEO premium",
+          "Exports de données illimités"
         ];
         
         const response = await axiosInstance.get('/api/subscriptions');
         this.subscriptions = response.data.map((element) => {
           const monthlyPrice = element.price;
           const yearlyPrice = (element.price * 0.8 * 12).toFixed(2);
-          // Attribuer featured=true uniquement au plan Mid-Tier
-          const featured = element.name.includes('Mid-Teir') || element.name.includes('Mid-Tier');
+          
+          // Attribuer featured=true uniquement au plan Mid-Tier / Intermédiaire
+          const featured = element.name.includes('Mid-Teir') || 
+                           element.name.includes('Mid-Tier') || 
+                           element.name.includes('Intermédiaire');
+          
+          // Attribuer les bonnes fonctionnalités selon le plan (avec prise en compte des noms en français)
+          let features;
+          if (element.name.includes('Free') || element.name.includes('Gratuit')) {
+            features = freeFeatures;
+          } else if (element.name.includes('Mid-Teir') || 
+                     element.name.includes('Mid-Tier') || 
+                     element.name.includes('Intermédiaire')) {
+            features = midTierFeatures;
+          } else if (element.name.includes('Premium')) {
+            features = premiumFeatures;
+          } else {
+            features = featured ? midTierFeatures : freeFeatures;
+          }
           
           return {
             ...element,
             featured,
-            features: featured ? featuredFeatures : regularFeatures,
+            features,
             monthlyPrice,
             yearlyPrice
           };
@@ -407,13 +403,17 @@ export default {
     },
   },
   computed: {
-    // Retourne le plan gratuit (Free Plan)
+    // Retourne le plan gratuit (Free Plan / Forfait Gratuit)
     getFreePlan() {
-      return this.subscriptions.find(sub => sub.name.includes('Free'));
+      return this.subscriptions.find(sub => sub.name.includes('Free') || sub.name.includes('Gratuit'));
     },
-    // Retourne le plan Mid-Tier
+    // Retourne le plan Mid-Tier / Forfait Intermédiaire
     getMidTierPlan() {
-      return this.subscriptions.find(sub => sub.name.includes('Mid-Teir') || sub.name.includes('Mid-Tier'));
+      return this.subscriptions.find(sub => 
+        sub.name.includes('Mid-Teir') || 
+        sub.name.includes('Mid-Tier') || 
+        sub.name.includes('Intermédiaire')
+      );
     },
     // Retourne le plan Premium
     getPremiumPlan() {
