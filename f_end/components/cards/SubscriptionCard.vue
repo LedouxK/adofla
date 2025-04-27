@@ -11,7 +11,7 @@
       <!-- Affichage du prix avec hauteur fixe pour éviter les décalages -->
       <div class="price-display" :class="{ 'yearly': subscriptionType === 'year' }">
         <span :class="[tier.featured ? 'text-white' : 'text-gray-900', 'text-5xl font-semibold tracking-tight']">
-          {{ subscriptionType === 'month' ? tier.monthlyPrice : tier.yearlyPrice }} €
+          <span class="price-wrapper">{{ subscriptionType === 'month' ? tier.monthlyPrice : tier.yearlyPrice }} <span class="currency">€</span></span>
         </span>
         <span :class="[tier.featured ? 'text-gray-400' : 'text-gray-500', 'text-base ml-1']">
           /mois

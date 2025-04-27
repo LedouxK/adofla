@@ -402,8 +402,15 @@ body {
 .price-display {
   height: 70px;
   display: flex;
-  align-items: baseline;
+  flex-direction: column;
+  justify-content: center;
   position: relative;
+}
+
+/* Assurer que le prix et le symbole € restent sur la même ligne */
+.price-display span.text-5xl {
+  white-space: nowrap;
+  font-size: 2.5rem; /* Taille légèrement réduite pour garantir que tout tient */
 }
 
 /* S'assurer que le texte "facturé annuellement" ne décale pas le reste */
