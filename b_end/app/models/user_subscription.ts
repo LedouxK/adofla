@@ -1,9 +1,8 @@
 import { DateTime } from 'luxon'
-
-import { BaseModel, column, hasOne } from '@adonisjs/lucid/orm'
-import User from '#models/user'
+import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Subscription from '#models/subscription'
-import type { HasOne } from '@adonisjs/lucid/types/relations'
+import User from '#models/user'
 
 export default class UserSubscription extends BaseModel {
   @column({ isPrimary: true })
@@ -16,13 +15,19 @@ export default class UserSubscription extends BaseModel {
   declare subscription_id: number
 
   @column()
-  declare start_date: Date
+  declare type: 'monthly' | 'yearly'
 
   @column()
-  declare end_date: Date
+  declare price_paid: number
+
+  @column.date()
+  declare start_date: DateTime
+
+  @column.date()
+  declare end_date: DateTime
 
   @column()
-  declare status: string
+  declare status: 'active' | 'inactive'
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -30,15 +35,13 @@ export default class UserSubscription extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
-  @hasOne(() => User, {
-    localKey: 'user_id',
-    foreignKey: 'id',
+  @belongsTo(() => Subscription, {
+    foreignKey: 'subscription_id',
   })
-  declare user: HasOne<typeof User>
+  declare subscription: BelongsTo<typeof Subscription>
 
-  @hasOne(() => Subscription, {
-    localKey: 'subscription_id',
-    foreignKey: 'id',
+  @belongsTo(() => User, {
+    foreignKey: 'user_id',
   })
-  declare subscription: HasOne<typeof Subscription>
+  declare user: BelongsTo<typeof User>
 }

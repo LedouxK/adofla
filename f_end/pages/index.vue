@@ -145,140 +145,14 @@
         
         <!-- Plans Container - Hauteur fixe pour éviter le décalage -->
         <div class="mx-auto mt-8 mb-16 grid max-w-lg grid-cols-1 items-stretch gap-y-6 sm:mt-12 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-3" style="min-height: 620px;">
-          <!-- Free Plan (sans option mensuel/annuel) -->
-          <div class="bg-white/60 sm:mx-8 lg:mx-0 rounded-t-3xl sm:rounded-b-none lg:rounded-bl-3xl lg:rounded-tr-none rounded-3xl p-8 ring-1 ring-gray-900/10 sm:p-10 flex flex-col">
-            <h3 class="text-violet-600 text-base/7 font-semibold">Free Plan</h3>
-            
-            <p class="mt-4 flex items-baseline gap-x-2">
-              <span class="text-gray-900 text-5xl font-semibold tracking-tight">0.00 €</span>
-              <span class="text-gray-500 text-base">/pour toujours</span>
-            </p>
-            
-            <p class="text-gray-600 mt-6 text-base/7">
-              Le plan parfait si vous débutez avec notre produit.
-            </p>
-            
-            <ul role="list" class="text-gray-600 mt-8 space-y-3 text-sm/6 sm:mt-10">
-              <li class="flex gap-x-3">
-                <CheckIcon class="text-violet-600 h-6 w-5 flex-none" aria-hidden="true" />
-                25 produits
-              </li>
-              <li class="flex gap-x-3">
-                <CheckIcon class="text-violet-600 h-6 w-5 flex-none" aria-hidden="true" />
-                Jusqu'à 10 000 abonnés
-              </li>
-              <li class="flex gap-x-3">
-                <CheckIcon class="text-violet-600 h-6 w-5 flex-none" aria-hidden="true" />
-                Analyses avancées
-              </li>
-              <li class="flex gap-x-3">
-                <CheckIcon class="text-violet-600 h-6 w-5 flex-none" aria-hidden="true" />
-                Support 24h/24 en 24h
-              </li>
-            </ul>
-            
-            <div class="mt-auto pt-8">
-              <a href="#" class="text-violet-600 ring-1 ring-inset ring-violet-200 hover:ring-violet-300 focus-visible:outline-violet-600 mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10 cursor-pointer">
-                Commencer maintenant
-              </a>
-            </div>
-          </div>
-
-          <!-- Pro Plan (avec option mensuel/annuel) -->
-          <div class="relative bg-violet-900 shadow-2xl rounded-3xl p-8 ring-1 ring-gray-900/10 sm:p-10 flex flex-col">
-            <h3 class="text-violet-200 text-base/7 font-semibold">Plan Pro</h3>
-            
-            <p class="mt-4 flex items-baseline gap-x-2">
-              <span class="text-white text-5xl font-semibold tracking-tight">
-                {{ billingPeriod === 'monthly' ? '50.00' : '40.00' }} €
-              </span>
-              <span class="text-gray-400 text-base">
-                /mois
-                <span v-if="billingPeriod === 'yearly'" class="block text-xs text-gray-300">facturé annuellement</span>
-              </span>
-            </p>
-            
-            <p class="text-gray-300 mt-6 text-base/7">
-              Support dédié et infrastructure pour votre entreprise.
-            </p>
-            
-            <ul role="list" class="text-gray-300 mt-8 space-y-3 text-sm/6 sm:mt-10">
-              <li class="flex gap-x-3">
-                <CheckIcon class="text-violet-200 h-6 w-5 flex-none" aria-hidden="true" />
-                Produits illimités
-              </li>
-              <li class="flex gap-x-3">
-                <CheckIcon class="text-violet-200 h-6 w-5 flex-none" aria-hidden="true" />
-                Abonnés illimités
-              </li>
-              <li class="flex gap-x-3">
-                <CheckIcon class="text-violet-200 h-6 w-5 flex-none" aria-hidden="true" />
-                Analyses avancées
-              </li>
-              <li class="flex gap-x-3">
-                <CheckIcon class="text-violet-200 h-6 w-5 flex-none" aria-hidden="true" />
-                Représentant de support dédié
-              </li>
-              <li class="flex gap-x-3">
-                <CheckIcon class="text-violet-200 h-6 w-5 flex-none" aria-hidden="true" />
-                Automatisations marketing
-              </li>
-              <li class="flex gap-x-3">
-                <CheckIcon class="text-violet-200 h-6 w-5 flex-none" aria-hidden="true" />
-                Intégrations personnalisées
-              </li>
-            </ul>
-            
-            <div class="mt-auto pt-8">
-              <a href="#" class="bg-violet-500 text-white shadow-sm hover:bg-violet-400 focus-visible:outline-violet-500 mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10 cursor-pointer">
-                Commencer maintenant
-              </a>
-            </div>
-          </div>
-
-          <!-- Business Plan (avec option mensuel/annuel) -->
-          <div class="bg-white/60 sm:mx-8 lg:mx-0 sm:rounded-t-none lg:rounded-bl-none lg:rounded-tr-3xl rounded-3xl p-8 ring-1 ring-gray-900/10 sm:p-10 flex flex-col">
-            <h3 class="text-violet-600 text-base/7 font-semibold">Plan Business</h3>
-            
-            <p class="mt-4 flex items-baseline gap-x-2">
-              <span class="text-gray-900 text-5xl font-semibold tracking-tight">
-                {{ billingPeriod === 'monthly' ? '100.00' : '80.00' }} €
-              </span>
-              <span class="text-gray-500 text-base">
-                /mois
-                <span v-if="billingPeriod === 'yearly'" class="block text-xs text-gray-500">facturé annuellement</span>
-              </span>
-            </p>
-            
-            <p class="text-gray-600 mt-6 text-base/7">
-              Support et infrastructure dédiés à votre entreprise.
-            </p>
-            
-            <ul role="list" class="text-gray-600 mt-8 space-y-3 text-sm/6 sm:mt-10">
-              <li class="flex gap-x-3">
-                <CheckIcon class="text-violet-600 h-6 w-5 flex-none" aria-hidden="true" />
-                25 produits
-              </li>
-              <li class="flex gap-x-3">
-                <CheckIcon class="text-violet-600 h-6 w-5 flex-none" aria-hidden="true" />
-                Jusqu'à 10 000 abonnés
-              </li>
-              <li class="flex gap-x-3">
-                <CheckIcon class="text-violet-600 h-6 w-5 flex-none" aria-hidden="true" />
-                Analyses avancées
-              </li>
-              <li class="flex gap-x-3">
-                <CheckIcon class="text-violet-600 h-6 w-5 flex-none" aria-hidden="true" />
-                Support 24h/24 en 24h
-              </li>
-            </ul>
-            
-            <div class="mt-auto pt-8">
-              <a href="#" class="text-violet-600 ring-1 ring-inset ring-violet-200 hover:ring-violet-300 focus-visible:outline-violet-600 mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10 cursor-pointer">
-                Commencer maintenant
-              </a>
-            </div>
-          </div>
+          <SubscriptionCard
+            v-for="(sub, idx) in subscriptions"
+            :key="sub.id"
+            :tier="sub"
+            :tierIdx="idx"
+            :billingPeriod="billingPeriod"
+            @subscribe="subscribeToPlan"
+          />
         </div>
       </section>
 
@@ -421,34 +295,39 @@ export default {
         });
       }
     },
+    // Optimisé pour meilleures performances
     async fetchSubscriptions() {
       try {
+        // Définissons ces fonctionnalités en dehors de la boucle pour éviter de recréer des tableaux
+        const regularFeatures = [
+          '25 produits', 
+          "Jusqu'à 10 000 abonnés", 
+          'Analyses avancées', 
+          'Support 24h/24 en 24h'
+        ];
+        
+        const featuredFeatures = [
+          'Produits illimités',
+          'Abonnés illimités',
+          'Analyses avancées',
+          'Représentant de support dédié',
+          'Automatisations marketing',
+          'Intégrations personnalisées',
+        ];
+        
         const response = await axiosInstance.get('/api/subscriptions');
-        this.subscriptions = response.data;
-        this.subscriptions.forEach((element, index) => {
-          if (index % 2 === 0) {
-            element.featured = false;
-            element.features = [
-              '25 produits', 
-              "Jusqu'à 10 000 abonnés", 
-              'Analyses avancées', 
-              'Support 24h/24 en 24h'
-            ];
-            element.monthlyPrice = element.price;
-            element.yearlyPrice = (element.price * 0.8 * 12).toFixed(2);
-          } else {
-            element.featured = true;
-            element.features = [
-              'Produits illimités',
-              'Abonnés illimités',
-              'Analyses avancées',
-              'Représentant de support dédié',
-              'Automatisations marketing',
-              'Intégrations personnalisées',
-            ];
-            element.monthlyPrice = element.price;
-            element.yearlyPrice = (element.price * 0.8 * 12).toFixed(2);
-          }
+        this.subscriptions = response.data.map((element, index) => {
+          const monthlyPrice = element.price;
+          const yearlyPrice = (element.price * 0.8 * 12).toFixed(2);
+          const featured = index % 2 !== 0;
+          
+          return {
+            ...element,
+            featured,
+            features: featured ? featuredFeatures : regularFeatures,
+            monthlyPrice,
+            yearlyPrice
+          };
         });
       } catch (error) {
         console.error('Erreur lors de la récupération des abonnements:', error);
@@ -482,8 +361,8 @@ export default {
       });
     },
     log_out,
-    async subscribeToPlan({ id, type }) {
-      if (!type) {
+    async subscribeToPlan(payload) {
+      if (!payload.type) {
         this.$Notice.info({
           title: 'Sélectionnez un type!',
         });
@@ -491,8 +370,8 @@ export default {
       }
       try {
         const response = await axiosInstance.post('/api/subscribe', {
-          subscription_id: id,
-          type: type,
+          subscription_id: payload.subscription_id,
+          type: payload.type,
         });
 
         if (response.data.success) {

@@ -50,7 +50,7 @@
                                     <div class="active tab-pane" id="activity">
                                         <h1 class="text-xl font-bold pb-5">Subscription History</h1>
                                         <!-- Subscriptions Table -->
-                                        <Table border :columns="columns2" :data="subsscriptionHistory">
+                                        <Table border :columns="columns2" :data="subscriptionHistory">
                                             <template #sub_name="{ row, index }">
                                                 {{ row.subscription.name }}
                                             </template>
@@ -108,19 +108,38 @@
                                 {{ feature }}
                             </li>
                         </ul>
-                        <!-- <RadioGroup size="small" class="mt-5" :style="tier.featured ? 'color: white' : ''" v-model="tier.subType">
-                            <Radio label="month" border>Month</Radio>
-                            <Radio label="year" border>Year</Radio>
-                        </RadioGroup> -->
+                        <div class="subscription-options">
+                            <h4>Choisissez le type d'abonnement</h4>
+                            <div class="toggle-button">
+                                <button 
+                                    @click="tier.subType = 'month'" 
+                                    :class="tier.subType === 'month' ? 'toggle-option active' : 'toggle-option'">
+                                    Mensuel
+                                </button>
+                                <button 
+                                    @click="tier.subType = 'year'" 
+                                    :class="tier.subType === 'year' ? 'toggle-option active' : 'toggle-option'">
+                                    Annuel
+                                </button>
+                            </div>
 
-                        <div class="toggle-button">
-            <button @click="tier.subType = 'month'" :class="tier.subType == 'month' ? 'toggle-option active' : 'toggle-option'">Monthly</button>
-            <button @click="tier.subType = 'year'" :class="tier.subType == 'year' ? 'toggle-option active' : 'toggle-option'">Annually</button>
-          </div>
+                            <h4>Choisissez la durée de l'abonnement</h4>
+                            <select v-model="tier.duration" class="duration-select">
+                                <option value="1">1 mois</option>
+                                <option value="3">3 mois</option>
+                                <option value="6">6 mois</option>
+                                <option value="12">12 mois</option>
+                            </select>
+                        </div>
 
-                        <a @click="updateSubscription(tier)"
-                            :class="[tier.featured ? 'bg-indigo-500 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline-indigo-500' : 'text-indigo-600 ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300 focus-visible:outline-indigo-600', 'mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10']">Get
-                            started today</a>
+                        <a 
+                            @click="updateSubscription(tier)"
+                            :class="[
+                                tier.featured ? 'bg-indigo-500 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline-indigo-500' : 'text-indigo-600 ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300 focus-visible:outline-indigo-600',
+                                'mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10'
+                            ]">
+                            S'abonner maintenant
+                        </a>
                     </div>
                 </div>
             </Modal>
@@ -221,7 +240,7 @@ export default {
                 { title: "Action", slot: "action",  minWidth: 100, },
             ],
             activeSubscriptions: [],
-            subsscriptionHistory: [],
+            subscriptionHistory: [],
             paginationInfo: null,
             per_page: 5,
         };
@@ -256,12 +275,12 @@ export default {
         },
         async loadSubscriptionHistory(page_number = 1) {
             try {
-                const res = await axiosInstance.get("/api/subsscriptionHistory");
+                const res = await axiosInstance.get("/api/subscriptionHistory");
                 res.data.forEach(element => {
                     element.startDate = this.formatDate(element.startDate)
                     element.endDate = this.formatDate(element.endDate)
                 });
-                this.subsscriptionHistory = res.data;
+                this.subscriptionHistory = res.data;
                 // this.paginationInfo = res.pagination;
             } catch (error) {
                 console.error("Error loading subscriptions:", error);

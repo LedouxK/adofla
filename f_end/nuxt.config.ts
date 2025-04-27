@@ -3,7 +3,32 @@ export default defineNuxtConfig({
   modules: ['@element-plus/nuxt', '@pinia/nuxt'],
 
   compatibilityDate: '2024-04-03',
-  devtools: { enabled: true },
+  devtools: { enabled: false }, // Désactivé pour améliorer les performances de développement
+  
+  // Optimisations de performance pour le développement
+  vite: {
+    optimizeDeps: {
+      include: [
+        'vue',
+        'vue-router',
+        'pinia',
+        'element-plus',
+        'view-ui-plus'
+      ],
+      exclude: []
+    },
+    build: {
+      chunkSizeWarningLimit: 1000, // Augmenter la limite pour éviter les avertissements
+      reportCompressedSize: false, // Désactiver les rapports de taille compressée
+      cssCodeSplit: false, // Désactiver la division du code CSS en dev
+      minify: false, // Pas de minification en dev
+    },
+    server: {
+      hmr: {
+        overlay: false // Désactiver l'overlay HMR qui peut causer des problèmes de performance
+      }
+    }
+  },
 
   postcss: {
     plugins: {
@@ -24,6 +49,40 @@ export default defineNuxtConfig({
     '~/assets/css/Tailwind.css',
   ],
 
+  // Réduire la charge de travail TypeScript pour accélérer le développement
+  typescript: {
+    typeCheck: false, // Désactiver la vérification de type en dev
+    shim: false
+  },
+  
+  // Optimisation du HMR et du rechargement de l'application
+  experimental: {
+    payloadExtraction: false, // Désactiver l'extraction de payload en dev
+    renderJsonPayloads: false
+  },
+  
+  // Vue
+  vue: {
+    compilerOptions: {
+      isCustomElement: (tag) => ['client-only'].includes(tag)
+    }
+  },
+  
+  // Configuration pour résoudre les problèmes de sérialisation
+  hooks: {
+    'webpack:config': (configs) => {
+      configs.forEach((config) => {
+        if (config.name === 'server') {
+          config.optimization = config.optimization || {}
+          config.optimization.minimizer = []
+        }
+      })
+    }
+  },
+  
+  // Désactiver SSR pour le développement
+  ssr: false,
+  
   app: {
     head: {
       title: 'Sub Manage',
