@@ -58,7 +58,7 @@ export default class UsersController {
     // Check if user exists
     const user = await User.findBy('email', email)
     if (!user) {
-      return response.status(404).json({ message: 'Email not found' })
+      return response.status(404).json({ message: 'Adresse email introuvable' })
     }
 
     // Generate Reset Token
@@ -67,12 +67,16 @@ export default class UsersController {
 
     const password_resets = await ResetPassword.create({ email, token })
 
-    // Send Reset Email
+    // Envoyer l'email de réinitialisation
     await mail.send((message: any) => {
-      message.to(email).subject('Password Reset Request').htmlView('reset_password', { token })
+      message
+        .to(email)
+        .from('noreply@flapicms.com', "L'équipe FlapiCMS")
+        .subject('Demande de réinitialisation de mot de passe')
+        .htmlView('reset_password', { token })
     })
 
-    return response.json({ message: 'Password reset email sent' })
+    return response.json({ message: 'Email de réinitialisation envoyé' })
   }
 
   public async resetPassword({ request, response }: HttpContext) {
@@ -82,7 +86,7 @@ export default class UsersController {
     const tokenRecord = await ResetPassword.query().where('token', token).first()
 
     if (!tokenRecord) {
-      return response.status(400).json({ message: 'Invalid or expired token' })
+      return response.status(400).json({ message: 'Jeton invalide ou expiré' })
     }
 
     // Update user password
@@ -95,7 +99,58 @@ export default class UsersController {
     // Delete the token
     await ResetPassword.query().where('token', token).delete()
 
-    return response.json({ message: 'Password reset successfully' })
+    return response.json({ message: 'Mot de passe réinitialisé avec succès' })
+  }
+  
+  // Valider le token d'invitation et récupérer l'email associé
+  public async validateToken({ params, response }: HttpContext) {
+    const token = params.token
+    
+    if (!token) {
+      return response.status(400).json({ message: 'Jeton manquant' })
+    }
+    
+    // Vérifier que le token existe dans la base de données
+    const tokenRecord = await ResetPassword.query().where('token', token).first()
+    
+    if (!tokenRecord) {
+      return response.status(400).json({ message: 'Jeton invalide ou expiré' })
+    }
+    
+    // Retourner l'email associé au token
+    return response.json({
+      valid: true,
+      email: tokenRecord.email
+    })
+  }
+  
+  // Finaliser la configuration du compte
+  public async setupAccount({ request, response }: HttpContext) {
+    const { token, password } = request.only(['token', 'password'])
+    
+    // Valider le token
+    const tokenRecord = await ResetPassword.query().where('token', token).first()
+    
+    if (!tokenRecord) {
+      return response.status(400).json({ message: 'Jeton invalide ou expiré' })
+    }
+    
+    // Mettre à jour le mot de passe de l'utilisateur
+    const user = await User.findBy('email', tokenRecord.email)
+    if (user) {
+      user.password = password
+      await user.save()
+    } else {
+      return response.status(404).json({ message: 'Utilisateur non trouvé' })
+    }
+    
+    // Supprimer le token
+    await ResetPassword.query().where('token', token).delete()
+    
+    return response.json({
+      message: 'Compte configuré avec succès. Vous pouvez maintenant vous connecter.',
+      email: tokenRecord.email
+    })
   }
 
   async login({ request }: HttpContext) {
@@ -118,12 +173,65 @@ export default class UsersController {
     }
   }
 
-  // Create a new user
+  // Create a new user with invitation email
   public async store({ request, response }: HttpContext) {
-    const { email, password, role_id } = request.only(['email', 'password', 'role_id'])
-    const user = await User.create({ email, password, role_id })
+    try {
+      // Récupérer uniquement l'email et le rôle (plus de mot de passe)
+      const { email, role_id } = request.only(['email', 'role_id'])
+      
+      // Vérifier si l'email existe déjà
+      const existingUser = await User.findBy('email', email)
+      if (existingUser) {
+        return response.conflict({ message: 'Un utilisateur avec cet email existe déjà' })
+      }
+      
+      // Générer un mot de passe temporaire aléatoire
+      const passwordRandom = await promisify(randomBytes)(16)
+      const tempPassword = passwordRandom.toString('hex')
+      
+      // Créer l'utilisateur avec le mot de passe temporaire
+      const user = await User.create({ 
+        email, 
+        password: tempPassword, 
+        role_id
+      })
+      
+      // Générer un token d'invitation
+      const tokenRandom = await promisify(randomBytes)(32)
+      const token = tokenRandom.toString('hex')
 
-    return response.created(user)
+      // Enregistrer le token pour la réinitialisation du mot de passe
+      await ResetPassword.create({ email, token })
+
+      // Construire l'URL pour le lien de configuration du compte
+      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:8080'
+      const setupUrl = `${frontendUrl}/setup-account/${token}`
+
+      // Envoi de l'email d'invitation
+      await mail.send((message: any) => {
+        message
+          .to(email)
+          .from('noreply@flapicms.com', "L'équipe FlapiCMS")
+          .subject('Invitation à rejoindre FlapiCMS')
+          .html(`
+            <h1>Bienvenue sur FlapiCMS</h1>
+            <p>Vous avez été invité à rejoindre notre plateforme.</p>
+            <p>Pour configurer votre compte, veuillez cliquer sur le lien suivant : <a href="${setupUrl}">Configurer mon compte</a></p>
+            <p>Ce lien expirera dans 24 heures.</p>
+            <p>L'équipe FlapiCMS</p>
+          `)
+      })  
+      return response.created({
+        user: { id: user.id, email: user.email, role_id: user.role_id },
+        message: 'Utilisateur créé avec succès. Un email d\'invitation a été envoyé.'
+      })
+    } catch (error) {
+      console.error('Erreur lors de la création de l\'utilisateur:', error)
+      return response.internalServerError({
+        message: 'Erreur lors de la création de l\'utilisateur',
+        error: error.message
+      })
+    }
   }
 
   // Get a list of all users

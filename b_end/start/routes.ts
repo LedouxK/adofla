@@ -30,6 +30,8 @@ router
     router.post('login', [UsersController, 'login'])
     router.post('sendResetEmail', [UsersController, 'sendResetEmail'])
     router.post('resetPassword', [UsersController, 'resetPassword'])
+    router.post('setupAccount', [UsersController, 'setupAccount'])
+    router.get('validateToken/:token', [UsersController, 'validateToken'])
     router.get('sessions', [PaymentController, 'sessions'])
 
     router.post('createCustomer', [PaymentController, 'createCustomer'])

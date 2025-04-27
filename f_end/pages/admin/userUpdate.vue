@@ -53,7 +53,7 @@
               <!-- Modal Body -->
               <div class="p-6">
                 <form @submit.prevent="form.id ? updateUser() : addUser()" class="space-y-6">
-                  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
                       <input
@@ -64,20 +64,22 @@
                         class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                         required
                       />
-                    </div>
-                    <div>
-                      <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mot de passe</label>
-                      <input
-                        id="password"
-                        v-model="form.password"
-                        type="password"
-                        placeholder="Entrez le mot de passe"
-                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                        required
-                      />
+                      <p v-if="!form.id" class="mt-1 text-xs text-gray-500 dark:text-gray-400">Un email d'invitation sera envoyé à l'utilisateur</p>
                     </div>
                     <div>
                       <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Type d'utilisateur</label>
+                      
+                      <!-- Champ mot de passe uniquement visible en mode édition -->
+                      <div v-if="form.id" class="mb-4">
+                        <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mot de passe (uniquement en modification)</label>
+                        <input
+                          id="password"
+                          v-model="form.password"
+                          type="password"
+                          placeholder="Laisser vide pour ne pas modifier"
+                          class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                        />
+                      </div>
                       <select 
                         id="role" 
                         v-model="form.role_id" 
@@ -321,9 +323,20 @@ export default {
         this.loadUsers()
         this.resetForm()
         this.addModal = false
+        
+        // Notification de succès
+        this.$Notice.success({
+          title: 'Utilisateur modifié',
+          desc: 'Les informations de l\'utilisateur ont été mises à jour avec succès.'
+        })
       } catch (error) {
-        console.error('Error updating user:', error)
-        alert('Error updating user. Please try again.')
+        console.error('Erreur lors de la modification de l\'utilisateur:', error)
+        
+        // Notification d'erreur
+        this.$Notice.error({
+          title: 'Erreur',
+          desc: 'Impossible de modifier l\'utilisateur. Veuillez réessayer.'
+        })
       } finally {
         this.loading = false
       }
@@ -334,27 +347,49 @@ export default {
       this.loading = true
       const axiosInstance = this.createAxiosInstance()
       try {
-        await axiosInstance.post('/api/users', this.form)
+        const response = await axiosInstance.post('/api/users', this.form)
         this.loadUsers()
         this.resetForm()
         this.addModal = false
+        
+        // Message de succès indiquant l'envoi d'email
+        this.$Notice.success({
+          title: 'Utilisateur ajouté',
+          desc: 'Un email d\'invitation a été envoyé à l\'utilisateur pour qu\'il puisse configurer son compte.',
+          duration: 6
+        })
       } catch (error) {
-        console.error('Error adding user:', error)
-        alert('Error adding user. Please try again.')
+        console.error('Erreur lors de l\'ajout de l\'utilisateur:', error)
+        const errorMessage = error.response?.data?.message || 'Une erreur est survenue lors de la création de l\'utilisateur.'
+        this.$Notice.error({
+          title: 'Erreur',
+          desc: errorMessage
+        })
       } finally {
         this.loading = false
       }
     },
 
     async removeUser(row) {
-      if (!confirm('Are you sure you want to delete this user?')) return
+      if (!confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) return
       const axiosInstance = this.createAxiosInstance()
       try {
         await axiosInstance.delete(`/api/users/${row.id}`)
         this.usersData = this.usersData.filter(user => user.id !== row.id)
+        
+        // Notification de succès
+        this.$Notice.success({
+          title: 'Utilisateur supprimé',
+          desc: 'L\'utilisateur a été supprimé avec succès.'
+        })
       } catch (error) {
-        console.error('Error deleting user:', error)
-        alert('Error deleting user. Please try again.')
+        console.error('Erreur lors de la suppression de l\'utilisateur:', error)
+        
+        // Notification d'erreur
+        this.$Notice.error({
+          title: 'Erreur',
+          desc: 'Impossible de supprimer l\'utilisateur. Veuillez réessayer.'
+        })
       }
     },
 
@@ -364,15 +399,16 @@ export default {
 
     hasEmptyFields() {
       if (!this.form.email) {
-        alert('Email is required')
+        alert('L\'email est requis')
         return true
       }
-      if (!this.form.id && !this.form.password) {
-        alert('Password is required')
+      // Vérification du mot de passe uniquement en mode édition
+      if (this.form.id && this.form.password && this.form.password.length < 8) {
+        alert('Le mot de passe doit contenir au moins 8 caractères')
         return true
       }
       if (!this.form.role_id) {
-        alert('User type is required')
+        alert('Le type d\'utilisateur est requis')
         return true
       }
       return false
