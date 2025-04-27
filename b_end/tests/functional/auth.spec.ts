@@ -42,8 +42,6 @@ test.group('Auth', (group: Group): void => {
 
     response.assertStatus(200)
     assert.exists(response.body().token, 'Le token doit être renvoyé')
-
-    token = response.body().token.token // Stocker le token pour d'autres tests
   })
 
   test('L\'utilisateur peut se déconnecter avec succès', async ({
@@ -57,7 +55,8 @@ test.group('Auth', (group: Group): void => {
       password: 'password123',
     })
 
-    token = connectresponse.body().token.token
+    token = connectresponse.body().token
+
 
     // Étape 1 : Déconnexion de l'utilisateur testuser@exemple.com
     const response: ApiResponse = await client.get('/api/logout').bearerToken(token) // Utilisation du token de l'utilisateur
@@ -93,7 +92,7 @@ test.group('Auth', (group: Group): void => {
       email: adminUser.email,
       password: 'adminpassword',
     })
-    adminToken = adminLoginResponse.body().token.token
+    adminToken = adminLoginResponse.body().token
 
     // Utilisez l'administrateur pour enregistrer un nouvel utilisateur
     const response: ApiResponse = await client
@@ -123,7 +122,16 @@ test.group('Auth', (group: Group): void => {
     client: ApiClient
     assert: Assert
   }): Promise<void> => {
+
+    const connectresponse: ApiResponse = await client.post('/api/login').json({
+      email: user.email,
+      password: 'password123',
+    })
+
+    token = connectresponse.body().token
+
     const newPassword = 'newpassword123'
+    
     const response: ApiResponse = await client
       .post('/api/changePassword')
       .bearerToken(token) // Utilisation du token pour l'utilisateur authentifié
@@ -154,7 +162,7 @@ test('Un administrateur peut supprimer un utilisateur', async ({
     email: 'adminn@example.com',
     password: 'adminpassword',
   })
-  const adminToken = adminLoginResponse.body().token.token // Récupère le token de l'administrateur
+  const adminToken = adminLoginResponse.body().token // Récupère le token de l'administrateur
 
   // Étape 2 : Création d'un utilisateur à supprimer (si nécessaire, ou utilisez un utilisateur déjà existant)
   const newUserResponse: ApiResponse = await client
