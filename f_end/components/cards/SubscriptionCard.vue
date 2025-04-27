@@ -8,13 +8,16 @@
       {{ tier.name }}
     </h3>
     <p class="mt-4 flex items-baseline gap-x-2">
-      <span :class="[tier.featured ? 'text-white' : 'text-gray-900', 'text-5xl font-semibold tracking-tight']">
-        {{ billingPeriod === 'monthly' ? tier.monthlyPrice : tier.yearlyPrice }} €
-      </span>
-      <span :class="[tier.featured ? 'text-gray-400' : 'text-gray-500', 'text-base']">
-        /mois
-        <span v-if="billingPeriod === 'yearly'" class="block text-xs">facturé annuellement</span>
-      </span>
+      <!-- Affichage du prix avec hauteur fixe pour éviter les décalages -->
+      <div class="price-display" :class="{ 'yearly': subscriptionType === 'year' }">
+        <span :class="[tier.featured ? 'text-white' : 'text-gray-900', 'text-5xl font-semibold tracking-tight']">
+          {{ subscriptionType === 'month' ? tier.monthlyPrice : tier.yearlyPrice }} €
+        </span>
+        <span :class="[tier.featured ? 'text-gray-400' : 'text-gray-500', 'text-base ml-1']">
+          /mois
+          <span v-if="subscriptionType === 'year'" class="block text-xs text-right">facturé annuellement</span>
+        </span>
+      </div>
     </p>
     <p :class="[tier.featured ? 'text-gray-300' : 'text-gray-600', 'mt-6 text-base/7']">
       {{ tier.description }}
@@ -26,33 +29,28 @@
       </li>
     </ul>
 
-    <!-- Options d'abonnement -->
-    <div class="subscription-options mt-5">
-      <div class="mb-3">
-        <h4 :class="[tier.featured ? 'text-gray-200' : 'text-gray-700', 'text-sm font-medium mb-2']">Type d'abonnement</h4>
-        <div class="flex rounded-md overflow-hidden border border-gray-300">
-          <button
-            type="button"
-            @click="selectSubType('monthly')"
-            :class="[
-              currentSubType === 'monthly'
-                ? (tier.featured ? 'bg-indigo-500 text-white' : 'bg-violet-500 text-white')
-                : (tier.featured ? 'bg-gray-700 text-gray-300' : 'bg-white text-gray-600'),
-              'flex-1 py-2 text-sm font-medium transition-colors'
-            ]">
-            Mensuel
-          </button>
-          <button
-            type="button"
-            @click="selectSubType('yearly')"
-            :class="[
-              currentSubType === 'yearly'
-                ? (tier.featured ? 'bg-indigo-500 text-white' : 'bg-violet-500 text-white')
-                : (tier.featured ? 'bg-gray-700 text-gray-300' : 'bg-white text-gray-600'),
-              'flex-1 py-2 text-sm font-medium transition-colors'
-            ]">
-            Annuel
-          </button>
+    <!-- Type d'abonnement avec utilisation du composant ToggleSwitch existant -->
+    <div class="mt-5">
+      <p :class="[tier.featured ? 'text-gray-200' : 'text-gray-700', 'text-sm font-medium mb-1']">Type d'abonnement</p>
+      
+      <!-- Conteneur avec hauteur fixe pour garantir la stabilité du layout -->
+      <div class="billing-type-container">
+        <!-- Utilisé pour positionner le badge d'économie sans perturber la mise en page -->
+        <div class="relative">
+          <!-- ToggleSwitch avec le badge Eco 20% intégré directement dans le composant -->
+        <div class="flex flex-col items-center">
+          <div class="relative w-full">
+            <ToggleSwitch
+              v-model="subscriptionType"
+              :options="[
+                { label: 'Mensuel', value: 'month' },
+                { label: subscriptionType === 'year' ? 'Annuel Eco 20%' : 'Annuel', value: 'year' }
+              ]"
+              class="toggle-custom"
+              :class="{'toggle-dark': tier.featured}"
+            />
+          </div>
+        </div>
         </div>
       </div>
     </div>
@@ -76,6 +74,7 @@
 <script setup>
 import { CheckIcon } from '@heroicons/vue/20/solid'
 import { ref } from 'vue'
+import ToggleSwitch from '@/components/ui/ToggleSwitch.vue'
 
 const props = defineProps({
   tier: {
@@ -85,29 +84,24 @@ const props = defineProps({
   tierIdx: {
     type: Number,
     required: true
-  },
-  billingPeriod: {
-    type: String,
-    default: 'monthly'
   }
 })
 
 const emit = defineEmits(['subscribe'])
 
-const currentSubType = ref(props.billingPeriod === 'yearly' ? 'yearly' : 'monthly')
+// Utilise la valeur par défaut 'month' pour l'état initial
+const subscriptionType = ref('month')
 
-const selectSubType = (type) => {
-  currentSubType.value = type
-}
+// Options pour le ToggleSwitch avec traductions en français
+const toggleOptions = [
+  { label: 'Mensuel', value: 'month' },
+  { label: 'Annuel', value: 'year' }
+]
 
 const subscribe = () => {
-  if (!currentSubType.value) {
-    alert('Veuillez sélectionner un type d\'abonnement')
-    return
-  }
   emit('subscribe', {
     subscription_id: props.tier.id,
-    type: currentSubType.value
+    type: subscriptionType.value === 'year' ? 'yearly' : 'monthly'
   })
 }
 </script>

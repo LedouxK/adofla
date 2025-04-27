@@ -125,32 +125,34 @@
 
         <p class="mx-auto mt-6 max-w-2xl text-pretty text-center text-lg font-medium text-gray-600 sm:text-xl/8">Optez pour un forfait abordable qui regroupe les meilleures fonctionnalités pour engager votre audience, fidéliser vos clients et stimuler vos ventes.</p>
         
-        <!-- Billing Switch - Seulement pour les plans payants -->
-        <div class="flex justify-center items-center my-12">
-          <span class="mr-3 text-base font-medium" :class="billingPeriod === 'monthly' ? 'text-violet-700' : 'text-gray-500'">Mensuel</span>
-          <div class="relative inline-flex h-8 w-16 items-center rounded-full cursor-pointer" @click="toggleBillingPeriod">
-            <span class="sr-only">Basculer la période de facturation</span>
-            <span :class="[
-              'absolute inset-0 rounded-full transition-colors duration-300 ease-in-out',
-              billingPeriod === 'yearly' ? 'bg-violet-600' : 'bg-gray-200'
-            ]"></span>
-            <span :class="[
-              'inline-block h-6 w-6 transform rounded-full bg-white shadow-md transition-transform duration-300 ease-in-out',
-              billingPeriod === 'yearly' ? 'translate-x-9' : 'translate-x-1'
-            ]"></span>
-          </div>
-          <span class="ml-3 text-base font-medium" :class="billingPeriod === 'yearly' ? 'text-violet-700' : 'text-gray-500'">Annuel</span>
-          <span v-if="billingPeriod === 'yearly'" class="ml-2 -translate-y-1 bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded-full">Économisez 20%</span>
-        </div>
+        <!-- Espace supplémentaire après le titre -->
+        <div class="h-10"></div>
         
         <!-- Plans Container - Hauteur fixe pour éviter le décalage -->
         <div class="mx-auto mt-8 mb-16 grid max-w-lg grid-cols-1 items-stretch gap-y-6 sm:mt-12 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-3" style="min-height: 620px;">
+          <!-- Plans organisés par ordre de priorité souhaité -->
+          <!-- Free Plan (toujours en premier) -->
           <SubscriptionCard
-            v-for="(sub, idx) in subscriptions"
-            :key="sub.id"
-            :tier="sub"
-            :tierIdx="idx"
-            :billingPeriod="billingPeriod"
+            v-if="getFreePlan"
+            :key="getFreePlan.id"
+            :tier="getFreePlan"
+            :tierIdx="0"
+            @subscribe="subscribeToPlan"
+          />
+          <!-- Mid-Tier Plan (maintenant en deuxième) -->
+          <SubscriptionCard
+            v-if="getMidTierPlan"
+            :key="getMidTierPlan.id"
+            :tier="getMidTierPlan"
+            :tierIdx="1"
+            @subscribe="subscribeToPlan"
+          />
+          <!-- Premium Plan (maintenant en troisième) -->
+          <SubscriptionCard
+            v-if="getPremiumPlan"
+            :key="getPremiumPlan.id"
+            :tier="getPremiumPlan"
+            :tierIdx="2"
             @subscribe="subscribeToPlan"
           />
         </div>
@@ -273,7 +275,6 @@ export default {
   },
   data() {
     return {
-      billingPeriod: 'monthly',
       subscriptions: [],
       profile: {
         name: "",
@@ -284,17 +285,6 @@ export default {
     };
   },
   methods: {
-    toggleBillingPeriod() {
-      this.billingPeriod = this.billingPeriod === 'monthly' ? 'yearly' : 'monthly';
-      
-      // Notification de l'économie réalisée
-      if (this.billingPeriod === 'yearly') {
-        this.$Notice.success({
-          title: 'Économie de 20%',
-          desc: 'Profitez de notre tarif préférentiel en choisissant un abonnement annuel.'
-        });
-      }
-    },
     // Optimisé pour meilleures performances
     async fetchSubscriptions() {
       try {
@@ -316,10 +306,11 @@ export default {
         ];
         
         const response = await axiosInstance.get('/api/subscriptions');
-        this.subscriptions = response.data.map((element, index) => {
+        this.subscriptions = response.data.map((element) => {
           const monthlyPrice = element.price;
           const yearlyPrice = (element.price * 0.8 * 12).toFixed(2);
-          const featured = index % 2 !== 0;
+          // Attribuer featured=true uniquement au plan Mid-Tier
+          const featured = element.name.includes('Mid-Teir') || element.name.includes('Mid-Tier');
           
           return {
             ...element,
@@ -376,12 +367,17 @@ export default {
 
         if (response.data.success) {
           // Vérifier si c'est un nouvel abonnement ou un changement d'abonnement
-          const message = response.data.changed 
-            ? 'Votre abonnement a été modifié avec succès!' 
-            : 'Abonnement réussi!';
+          const title = response.data.changed 
+            ? 'Forfait modifié !' 
+            : 'Abonnement réussi !';
+            
+          const desc = response.data.changed 
+            ? 'Votre nouvel abonnement est actif' 
+            : 'Bienvenue dans votre nouveau forfait';
             
           this.$Notice.success({
-            title: message,
+            title: title,
+            desc: desc
           });
         } else {
           this.$Notice.error({
@@ -390,10 +386,38 @@ export default {
         }
       } catch (error) {
         console.error("Erreur lors de l'abonnement au forfait:", error);
-        this.$Notice.error({
-          title: "Une erreur s'est produite lors du traitement de votre abonnement.",
-        });
+        
+        // Vérifier si c'est le cas spécifique où l'utilisateur a déjà ce forfait
+        if (error.response && error.response.data && 
+            error.response.data.message && 
+            error.response.data.message.includes('déjà abonné')) {
+          
+          this.$Notice.info({
+            title: "Abonnement actif",
+            desc: "Vous êtes déjà abonné(e) à ce forfait"
+          });
+        } else {
+          // Pour les autres types d'erreurs
+          this.$Notice.error({
+            title: "Une erreur s'est produite lors du traitement de votre abonnement.",
+            desc: error.response?.data?.message || "Veuillez réessayer ultérieurement."
+          });
+        }
       }
+    },
+  },
+  computed: {
+    // Retourne le plan gratuit (Free Plan)
+    getFreePlan() {
+      return this.subscriptions.find(sub => sub.name.includes('Free'));
+    },
+    // Retourne le plan Mid-Tier
+    getMidTierPlan() {
+      return this.subscriptions.find(sub => sub.name.includes('Mid-Teir') || sub.name.includes('Mid-Tier'));
+    },
+    // Retourne le plan Premium
+    getPremiumPlan() {
+      return this.subscriptions.find(sub => sub.name.includes('Premium'));
     },
   },
   mounted() {

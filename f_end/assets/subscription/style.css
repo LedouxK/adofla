@@ -321,3 +321,106 @@ body {
 .toggle-option:hover:not(.active) {
   background-color: #e5e7eb;
 }
+
+/* Nouveaux styles pour les toggles professionnels */
+.billing-type-container {
+  margin-top: 12px;
+  position: relative;
+  height: 36px; /* Hauteur fixe pour éviter les décalages */
+  display: flex;
+  justify-content: center;
+}
+
+.switch-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 162px; /* Largeur fixe pour stabiliser la mise en page */
+  margin: 0 auto;
+  position: relative;
+}
+
+.switch-label {
+  font-size: 14px;
+  margin: 0 5px;
+  width: 48px; /* Largeur fixe pour éviter les mouvements */
+  text-align: center;
+  z-index: 1;
+}
+
+/* Styles personnalisés pour le composant ToggleSwitch dans les cartes */
+.toggle-custom {
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.toggle-custom .toggle-container {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 190px;
+}
+
+.toggle-custom .toggle-option {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  background-color: #f9fafb;
+  min-width: 50%;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.toggle-custom .toggle-option--active {
+  background-color: #6366f1;
+  color: white;
+}
+
+/* Version dark pour les cartes avec featured=true */
+.toggle-dark .toggle-container {
+  border-color: #4b5563;
+}
+
+.toggle-dark .toggle-option {
+  background-color: #1f2937;
+  color: #9ca3af;
+}
+
+.toggle-dark .toggle-option--active {
+  background-color: #818cf8;
+  color: white;
+}
+
+/* Suppression du badge Eco 20% indépendant puisqu'il est maintenant intégré au label */
+
+/* Hauteur fixe pour la zone d'affichage du prix */
+.price-display {
+  height: 70px;
+  display: flex;
+  align-items: baseline;
+  position: relative;
+}
+
+/* S'assurer que le texte "facturé annuellement" ne décale pas le reste */
+.price-display.yearly {
+  margin-bottom: 0;
+}
+
+.eco-tag.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.dark .pro-toggle:checked {
+  background-color: #818cf8;
+}
+
+.dark .eco-tag {
+  background-color: #064e3b;
+  color: #ecfdf5;
+}
