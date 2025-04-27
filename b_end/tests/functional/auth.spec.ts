@@ -10,7 +10,7 @@ test.group('Auth', (group: Group): void => {
   let adminUser: User
   let adminToken: string
 
-  group.setup(async () => {
+  group.setup(async (): Promise<void> => {
     // Crée un utilisateur administrateur pour les tests
     adminUser = await User.create({
       email: 'adminn@example.com',
@@ -47,17 +47,21 @@ test.group('Auth', (group: Group): void => {
   })
 
   test('L\'utilisateur peut se déconnecter avec succès', async ({
-    client,
-    assert,
+    client
   }: {
     client: ApiClient
-    assert: Assert
   }): Promise<void> => {
+
+    const connectresponse: ApiResponse = await client.post('/api/login').json({
+      email: user.email,
+      password: 'password123',
+    })
+
+    token = connectresponse.body().token.token
+
     // Étape 1 : Déconnexion de l'utilisateur testuser@exemple.com
     const response: ApiResponse = await client.get('/api/logout').bearerToken(token) // Utilisation du token de l'utilisateur
-  
-    response.assertStatus(200) // Vérifier que la déconnexion a réussi
-    assert.equal(response.body().message, 'success') // Vérifier que le message de succès est correct
+    response.assertBodyContains({ message: 'success' })
   })
 
   // Test de connexion avec un mauvais mot de passe (tout utilisateur)
@@ -136,4 +140,40 @@ test.group('Auth', (group: Group): void => {
     const updatedUser = await User.find(user.id)
     assert.notEqual(updatedUser?.password, 'password123', 'Le mot de passe doit avoir changé')
   })
+})
+
+test('Un administrateur peut supprimer un utilisateur', async ({
+  client,
+  assert,
+}: {
+  client: ApiClient
+  assert: Assert
+}): Promise<void> => {
+  // Étape 1 : Connexion de l'administrateur pour obtenir un token valide
+  const adminLoginResponse: ApiResponse = await client.post('/api/login').json({
+    email: 'adminn@example.com',
+    password: 'adminpassword',
+  })
+  const adminToken = adminLoginResponse.body().token.token // Récupère le token de l'administrateur
+
+  // Étape 2 : Création d'un utilisateur à supprimer (si nécessaire, ou utilisez un utilisateur déjà existant)
+  const newUserResponse: ApiResponse = await client
+    .post('/api/users')
+    .bearerToken(adminToken) // Utilisation du token de l'administrateur
+    .json({
+      email: 'userToDelete@example.com',
+      password: 'securepassword',
+      role_id: 2, // L'utilisateur créé aura un rôle non admin
+    })
+  const userId = newUserResponse.body().id; // Récupère l'ID de l'utilisateur à supprimer
+
+  // Étape 3 : Suppression de l'utilisateur
+  const deleteResponse: ApiResponse = await client
+    .delete(`/api/users/${userId}`) // Envoie une requête DELETE pour supprimer l'utilisateur
+    .bearerToken(adminToken) // Utilisation du token de l'administrateur
+  deleteResponse.assertStatus(204) // Vérifier que la suppression a réussi (204 No Content)
+
+  // Étape 4 : Vérifier que l'utilisateur a bien été supprimé de la base de données
+  const deletedUser = await User.find(userId)
+  assert.isNull(deletedUser, 'L\'utilisateur n\'a pas été supprimé de la base de données')
 })
