@@ -33,25 +33,25 @@ const logOut = () => {
             <li>
               <router-link to="/admin/userUpdate" class="flex items-center gap-2 px-4 py-2 rounded hover:bg-accent/40 dark:hover:bg-gray-700 text-gray-700 dark:text-white">
                 <Users class="w-4 h-4 text-primary" />
-                <span class="text-sm">Users Update</span>
+                <span class="text-sm">Mise à jour utilisateurs</span>
               </router-link>
             </li>
             <li>
               <router-link to="/admin/userSubscription" class="flex items-center gap-2 px-4 py-2 rounded hover:bg-accent/40 dark:hover:bg-gray-700 text-gray-700 dark:text-white">
                 <Database class="w-4 h-4 text-primary" />
-                <span class="text-sm">User Subscriptions</span>
+                <span class="text-sm">Abonnements utilisateurs</span>
               </router-link>
             </li>
             <li>
               <a @click.prevent="basicStore.changeModel(true)" class="flex items-center gap-2 px-4 py-2 rounded hover:bg-accent/40 dark:hover:bg-gray-700 cursor-pointer text-gray-700 dark:text-white">
                 <Lock class="w-4 h-4 text-primary" />
-                <span class="text-sm">Change Password</span>
+                <span class="text-sm">Changer le mot de passe</span>
               </a>
             </li>
             <li>
               <a @click.prevent="logOut" class="flex items-center gap-2 px-4 py-2 rounded hover:bg-red-100 text-red-600 cursor-pointer">
                 <LogOut class="w-4 h-4" />
-                <span class="text-sm">Log Out</span>
+                <span class="text-sm">Déconnexion</span>
               </a>
             </li>
           </ul>
@@ -66,10 +66,10 @@ const logOut = () => {
     <div class="flex-1 flex flex-col overflow-hidden">
       <!-- Header -->
       <header class="bg-white dark:bg-gray-800 shadow-sm px-6 py-4 flex items-center justify-between border-b border-gray-200 dark:border-gray-700">
-        <h1 class="text-xl font-semibold text-primary dark:text-white">Dashboard</h1>
+        <h1 class="text-xl font-semibold text-primary dark:text-white">Tableau de bord</h1>
         <button @click="toggleTheme" class="flex items-center gap-2 text-sm text-primary hover:underline dark:text-accent">
           <component :is="isDark ? Sun : Moon" class="w-4 h-4" />
-          {{ isDark ? 'Light Mode' : 'Dark Mode' }}
+          {{ isDark ? 'Mode clair' : 'Mode sombre' }}
         </button>
       </header>
 
@@ -80,7 +80,13 @@ const logOut = () => {
     </div>
 
     <!-- Password Modal -->
-    <Modal okText="Back" width="600" title="Change Password" v-model="basicStore.model">
+    <Modal 
+      title="Changer votre mot de passe" 
+      v-model="basicStore.model"
+      :styles="{ top: '20px' }"
+      width="600"
+      footer-hide
+    >
       <changePassword />
     </Modal>
   </div>

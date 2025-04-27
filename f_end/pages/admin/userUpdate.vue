@@ -18,12 +18,12 @@
           <nav class="text-sm">
             <ol class="list-none p-0 inline-flex">
               <li class="flex items-center">
-                <a href="/admin" class="text-gray-600 dark:text-gray-300 hover:text-blue-600">Home</a>
+                <a href="/admin" class="text-gray-600 dark:text-gray-300 hover:text-blue-600">Accueil</a>
                 <svg class="h-3 w-3 mx-2 fill-current text-gray-400 dark:text-gray-500" viewBox="0 0 320 512">
                   <path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c-9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c-9.373 9.372-9.373 24.568-.001 33.941z" />
                 </svg>
               </li>
-              <li class="text-gray-500 dark:text-gray-400">User Update</li>
+              <li class="text-gray-500 dark:text-gray-400">Mise à jour utilisateurs</li>
             </ol>
           </nav>
         </div>
@@ -42,7 +42,7 @@
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl overflow-hidden" @click.stop>
               <!-- Modal Header -->
               <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                <h3 class="text-lg font-medium text-gray-900 dark:text-white">{{ form.id ? 'Update User' : 'Add User' }}</h3>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white">{{ form.id ? 'Modifier l\'utilisateur' : 'Ajouter un utilisateur' }}</h3>
                 <button @click="addModal = false" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
                   <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -60,24 +60,24 @@
                         id="email"
                         v-model="form.email"
                         type="email"
-                        placeholder="Enter email"
+                        placeholder="Entrez l'email"
                         class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                         required
                       />
                     </div>
                     <div>
-                      <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+                      <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mot de passe</label>
                       <input
                         id="password"
                         v-model="form.password"
                         type="password"
-                        placeholder="Enter password"
+                        placeholder="Entrez le mot de passe"
                         class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                         required
                       />
                     </div>
                     <div>
-                      <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">User Type</label>
+                      <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Type d'utilisateur</label>
                       <select 
                         id="role" 
                         v-model="form.role_id" 
@@ -95,7 +95,7 @@
                       @click="addModal = false" 
                       class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-md transition duration-200"
                     >
-                      Cancel
+                      Annuler
                     </button>
                     <button 
                       type="submit"
@@ -110,7 +110,7 @@
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      {{ form.id ? 'Update' : 'Add' }}
+                      {{ form.id ? 'Modifier' : 'Ajouter' }}
                     </button>
                   </div>
                 </form>
@@ -132,11 +132,11 @@
                     <span class="ml-1">↕</span>
                   </th>
                   <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer" @click="sortTable('role_id')">
-                    User Type
+                    Type d'utilisateur
                     <span class="ml-1">↕</span>
                   </th>
                   <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Action
+                    Actions
                   </th>
                 </tr>
               </thead>
@@ -156,13 +156,13 @@
                       @click="editUser(row)"
                       class="mx-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md text-sm transition duration-200"
                     >
-                      Edit
+                      Modifier
                     </button>
                     <button 
                       @click="removeUser(row)"
                       class="mx-1 bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm transition duration-200"
                     >
-                      Delete
+                      Supprimer
                     </button>
                   </td>
                 </tr>
@@ -175,7 +175,7 @@
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      <span class="ml-2">Loading...</span>
+                      <span class="ml-2">Chargement...</span>
                     </div>
                   </td>
                 </tr>
@@ -196,7 +196,7 @@
                     : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 bg-white dark:bg-gray-800'
                 ]"
               >
-                <span class="sr-only">Previous</span>
+                <span class="sr-only">Précédent</span>
                 <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                   <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
                 </svg>
@@ -226,7 +226,7 @@
                     : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 bg-white dark:bg-gray-800'
                 ]"
               >
-                <span class="sr-only">Next</span>
+                <span class="sr-only">Suivant</span>
                 <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                   <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4-4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                 </svg>

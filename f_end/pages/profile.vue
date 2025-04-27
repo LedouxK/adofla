@@ -176,9 +176,12 @@
   
       <!-- Change Password Modal -->
       <Modal 
-        title="Change Password" 
+        title="Changer votre mot de passe" 
         v-model="basicStore.model"
         :styles="{ top: '20px' }"
+        footer-hide
+        cancelText="Annuler"
+        backText="Retour"
       >
         <changePassword></changePassword>
       </Modal>

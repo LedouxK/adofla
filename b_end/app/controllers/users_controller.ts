@@ -22,19 +22,19 @@ export default class UsersController {
       const user = auth.user
 
       if (!user) {
-        return response.unauthorized({ message: 'User not authenticated' })
+        return response.unauthorized({ message: 'Utilisateur non authentifié' })
       }
 
       // Verify the current password
       const isPasswordValid = await Hash.verify(user.password, current_password)
       if (!isPasswordValid) {
-        return response.badRequest({ message: 'Current password is incorrect' })
+        return response.badRequest({ message: 'Le mot de passe actuel est incorrect' })
       }
 
       // Check if the new password matches the confirmation password
       if (new_password !== confirm_password) {
         return response.badRequest({
-          message: 'New password and confirmation password do not match',
+          message: 'Le nouveau mot de passe et sa confirmation ne correspondent pas',
         })
       }
 
@@ -43,11 +43,11 @@ export default class UsersController {
       await user.save()
 
       // Return success response
-      return response.ok({ message: 'Password changed successfully' })
+      return response.ok({ message: 'Mot de passe modifié avec succès' })
     } catch (error) {
       console.error(error)
       return response.internalServerError({
-        message: 'Failed to change password',
+        message: 'Impossible de modifier le mot de passe',
         error: error.message,
       })
     }
