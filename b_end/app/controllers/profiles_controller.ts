@@ -4,14 +4,12 @@ import app from '@adonisjs/core/services/app'
 
 import { randomBytes } from 'crypto'
 import { promisify } from 'util'
-import fs from 'fs/promises';
-
+import * as fs from 'fs';
+import * as fsPromises from 'fs/promises';
 
 export default class ProfilesController {
   
   public async profilePicture({ request, response, auth }: HttpContext) {
-    // console.log(request.all())
-    //   return response.created(request.all());
     const file = request.file('file', {
       size: '10mb', // Maximum file size (e.g., 10 MB)
       extnames: ['jpg', 'png', 'jpeg'],
@@ -29,16 +27,60 @@ export default class ProfilesController {
       const random = await promisify(randomBytes)(32)
       const token = random.toString('hex')
 
+      // Générer un nom unique pour le fichier
       const newFileName = `${token}.${file.extname}`;
-
-      const filePath:any = await file.move(app.makePath('../f_end/public/uploads/profile'), {
-        name: newFileName,
-      })
+      
+      // Créer les chemins complets
+      const profileDir = app.makePath('../f_end/public/uploads/profile');
+      const originalsDir = app.makePath('../f_end/public/uploads/profile/originals');
+      
+      // S'assurer que les dossiers existent
+      try {
+        // Vérifier si les dossiers existent
+        await fsPromises.access(profileDir, fs.constants.F_OK);
+        
+        try {
+          await fsPromises.access(originalsDir, fs.constants.F_OK);
+        } catch (dirError) {
+          // Créer le répertoire des originaux s'il n'existe pas
+          await fsPromises.mkdir(originalsDir);
+        }
+      } catch (mainDirError) {
+        // Créer le répertoire principal s'il n'existe pas
+        await fsPromises.mkdir(profileDir);
+      }
+      
+      // Stocker l'image dans le dossier principal pour l'utiliser comme image de profil
+      try {
+        await file.move(profileDir, {
+          name: newFileName,
+          overwrite: true // Écraser si le fichier existe déjà
+        });
+      } catch (moveError) {
+        throw moveError; // Propager l'erreur
+      }
+      
+      // Copier le même fichier dans le dossier "originals" pour conserver la version haute qualité
+      try {
+        // Utiliser fs pour copier le fichier vers le dossier des originaux
+        const sourcePath = app.makePath(`../f_end/public/uploads/profile/${newFileName}`);
+        const destPath = app.makePath(`../f_end/public/uploads/profile/originals/${newFileName}`);
+        
+        // Vérifier que le fichier source existe avant de copier
+        try {
+          await fsPromises.access(sourcePath, fs.constants.F_OK);
+          await fsPromises.copyFile(sourcePath, destPath);
+        } catch (accessError) {
+          // Si le fichier source n'existe pas, on ignore silencieusement
+        }
+      } catch (copyError) {
+        // Ne pas échouer tout le processus si la copie de l'original échoue
+      }
 
       const user = auth.user;
-          if (!user) {
-            return response.unauthorized({ message: 'User not authenticated' });
-          }
+      if (!user) {
+        return response.unauthorized({ message: 'User not authenticated' });
+      }
 
       var data = {
         user_id: 0,
@@ -48,24 +90,56 @@ export default class ProfilesController {
 
       // const has_profile = Profile.query().where('user_id', user.id).first();
       const has_profile = await Profile.findBy('user_id', user.id);
+      
       var profile
       if (!has_profile) {
-        //create
-         profile = await Profile.create(data);
+        // Création d'un nouveau profil
+        profile = await Profile.create(data);
       }
       else
       {
-        // Delete the file
-        // await fs.access(has_profile.p_pic);
-        // await fs.unlink(has_profile.p_pic);
-        //update 
-         profile = await Profile.find(has_profile.id)
-        profile.p_pic = newFileName
-
-        await profile.save()
+        // Mise à jour du profil existant
+        profile = await Profile.find(has_profile.id);
+        if (profile) {
+          // Si l'utilisateur avait déjà une photo de profil et qu'elle est différente de la nouvelle
+          const oldPicture = profile.p_pic;
+          if (oldPicture && oldPicture !== 'default.jpg' && oldPicture !== newFileName) {
+            // Chemins vers les anciens fichiers (original et optimisé)
+            const oldFilePath = app.makePath('../f_end/public/uploads/profile', oldPicture);
+            const oldOriginalPath = app.makePath('../f_end/public/uploads/profile/originals', oldPicture);
+            
+            // Supprimer les anciens fichiers s'ils existent
+            try {
+              // Vérifier et supprimer le fichier principal
+              try {
+                await fsPromises.access(oldFilePath, fs.constants.F_OK);
+                await fsPromises.unlink(oldFilePath);
+                console.log(`Ancien fichier supprimé: ${oldFilePath}`);
+              } catch (accessError) {
+                // Le fichier n'existe pas, on ignore
+              }
+              
+              // Vérifier et supprimer le fichier original
+              try {
+                await fsPromises.access(oldOriginalPath, fs.constants.F_OK);
+                await fsPromises.unlink(oldOriginalPath);
+                console.log(`Ancien fichier original supprimé: ${oldOriginalPath}`);
+              } catch (accessError) {
+                // Le fichier n'existe pas, on ignore
+              }
+            } catch (deleteError) {
+              console.error('Erreur lors de la suppression des anciens fichiers:', deleteError);
+              // On continue malgré l'erreur de suppression
+            }
+          }
+          
+          // Mise à jour du profil avec la nouvelle photo
+          profile.p_pic = newFileName;
+          await profile.save();
+        }
       }
 
-      return response.ok({ message: 'File uploaded successfully', fileName: file.fileName });
+      return response.ok({ message: 'File uploaded successfully', pPic: newFileName });
     } catch (error) {
       return response.internalServerError({ message: 'Failed to upload file', error });
     }
@@ -95,12 +169,16 @@ export default class ProfilesController {
           else
           {
             //update 
-             profile = await Profile.find(has_profile.id)
-            profile.name = data.name
-            profile.role = data.role
-            profile.about = data.about
-
-            await profile.save()
+             profile = await Profile.find(has_profile.id);
+             
+            if (profile) {
+              profile.name = data.name;
+              profile.role = data.role;
+              profile.about = data.about;
+              await profile.save();
+            } else {
+              throw new Error('Profil introuvable malgré son existence dans la base');
+            }
           }
       
           // Update or create the profile
@@ -116,7 +194,7 @@ export default class ProfilesController {
         }
       }
 
-      public async index({ request, response, auth }: HttpContext) {
+      public async index({ response, auth }: HttpContext) {
         const user = auth.user;
         if (!user) {
             return response.unauthorized({ message: 'User not authenticated' });
