@@ -64,11 +64,15 @@ export default class UserSubscriptionsController {
   public async subscribe({ request, auth, response }: HttpContextContract) {
     const user = await auth.getUserOrFail()
     const subscriptionId = request.input<number>('subscription_id')
-    const type = request.input<'monthly' | 'yearly'>('type')
+    let type = request.input<string>('type')
+    
+    // Standardiser le format du type (accepter à la fois month/year et monthly/yearly)
+    if (type === 'month') type = 'monthly'
+    if (type === 'year') type = 'yearly'
 
     if (!subscriptionId || !['monthly', 'yearly'].includes(type)) {
       return response.badRequest({
-        message: 'subscription_id et type (monthly|yearly) sont requis.',
+        message: 'subscription_id et type (monthly|yearly ou month|year) sont requis.',
       })
     }
 
@@ -161,6 +165,88 @@ export default class UserSubscriptionsController {
     })
 
     return response.ok({ success: true, subscription: newSub })
+  }
+
+  public async adminSubscribe({ request, auth, response }: HttpContextContract) {
+    // Vérifier l'authentification et les droits d'administrateur
+    await auth.authenticate()
+    const admin = auth.user
+    
+    // Vérifier que l'utilisateur est administrateur (role_id === 1)
+    if (!admin || admin.role_id !== 1) {
+      return response.unauthorized({ message: 'Seuls les administrateurs peuvent attribuer des abonnements.' })
+    }
+
+    // Récupérer les paramètres de la requête
+    const userId = request.input<number>('user_id')
+    const subscriptionId = request.input<number>('subscription_id')
+    let type = request.input<string>('type')
+    
+    // Standardiser le format du type (accepter à la fois month/year et monthly/yearly)
+    if (type === 'month') type = 'monthly'
+    if (type === 'year') type = 'yearly'
+
+    if (!userId || !subscriptionId || !['monthly', 'yearly'].includes(type)) {
+      return response.badRequest({
+        message: 'user_id, subscription_id et type (monthly|yearly ou month|year) sont requis.',
+      })
+    }
+
+    // Vérifier que l'utilisateur existe
+    const targetUser = await User.find(userId)
+    if (!targetUser) {
+      return response.notFound({ message: 'Utilisateur non trouvé.' })
+    }
+
+    // Vérifier si l'utilisateur a déjà un abonnement actif
+    const existing = await UserSubscription.query()
+      .where('user_id', userId)
+      .where('status', 'active')
+      .first()
+
+    // Si l'utilisateur a déjà un abonnement actif, le désactiver
+    if (existing) {
+      // Si c'est le même abonnement, renvoyer une erreur
+      if (existing.subscription_id === subscriptionId && existing.type === type) {
+        return response.badRequest({ 
+          message: 'L\'utilisateur est déjà abonné à ce forfait.' 
+        })
+      }
+
+      // Désactiver l'ancien abonnement
+      existing.status = 'inactive'
+      await existing.save()
+    }
+
+    // Récupérer le plan d'abonnement
+    const plan = await Subscription.find(subscriptionId)
+    if (!plan) {
+      return response.notFound({ message: 'Plan non trouvé.' })
+    }
+
+    // Calculer les dates et le prix
+    const months = type === 'yearly' ? 12 : 1
+    const pricePaid = type === 'yearly' ? Number((plan.price * 12 * 0.8).toFixed(2)) : plan.price
+
+    const startDate = DateTime.now()
+    const endDate = startDate.plus({ months })
+
+    // Créer le nouvel abonnement
+    const userSub = await UserSubscription.create({
+      user_id: userId,
+      subscription_id: subscriptionId,
+      type: type,
+      price_paid: pricePaid,
+      start_date: startDate,
+      end_date: endDate,
+      status: 'active',
+    })
+
+    return response.ok({ 
+      success: true, 
+      subscription: userSub,
+      changed: existing ? true : false 
+    })
   }
 
   public async unsubscribe({ auth, request, response }: HttpContextContract) {

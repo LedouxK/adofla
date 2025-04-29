@@ -50,7 +50,7 @@ router
     router.get('subscriptions', [SubscriptionsController, 'index'])
     router.get('subscriptions/:id', [SubscriptionsController, 'show'])
     router.post('subscribe', [UserSubscriptionsController, 'subscribe'])
-    // router.post('addAdminSubscribe', [UserSubscriptionsController, 'addAdminSubscribe'])
+    router.post('adminSubscribe', [UserSubscriptionsController, 'adminSubscribe'])
     router.post('unsubscribe', [UserSubscriptionsController, 'unsubscribe'])
     router.get('activeSubscriptions', [UserSubscriptionsController, 'activeSubscriptions'])
     router.get('subscriptionHistory', [UserSubscriptionsController, 'subscriptionHistory'])

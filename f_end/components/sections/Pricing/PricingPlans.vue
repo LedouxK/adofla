@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto mt-8 mb-16 grid max-w-lg grid-cols-1 items-stretch gap-y-6 sm:mt-12 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-3" style="min-height: 620px;">
+  <div class="mx-auto mt-6 mb-12 grid max-w-lg grid-cols-1 items-stretch gap-y-4 sm:mt-8 sm:gap-y-0 sm:gap-x-4 lg:max-w-5xl lg:grid-cols-3" style="min-height: 560px;">
     <!-- Plans organisés par ordre de priorité souhaité -->
     <!-- Free Plan (toujours en premier) -->
     <SubscriptionPlan 

@@ -19,9 +19,8 @@
                 <!--begin::Actions-->
                 <div class="d-flex align-items-center py-1">
                     <Breadcrumb class="breadcrumb float-sm-right">
-                        <BreadcrumbItem to="/admin">Home</BreadcrumbItem>
-                        <!-- <BreadcrumbItem to="/components/breadcrumb">Components</BreadcrumbItem> -->
-                        <BreadcrumbItem>Users Subscribtion</BreadcrumbItem>
+                        <BreadcrumbItem to="/admin">Accueil</BreadcrumbItem>
+                        <BreadcrumbItem>Abonnements utilisateurs</BreadcrumbItem>
                     </Breadcrumb>
                 </div>
                 <!--end::Actions-->
@@ -35,23 +34,40 @@
                         <!-- <h4>Subscriptions</h4> -->
                         <Row :gutter="16" class="mb-3">
                             <Col span="8">
-                            <label style="width: 100%" for="">Filter By Email</label>
-                            <Input style="width: 100%" @input="loadActiveSubscriptions()" v-model="filter.email"
-                                size="large" placeholder="Email" />
+                            <label class="block text-sm font-medium text-gray-700 mb-1" for="filterEmail">Filtrer par email</label>
+                            <Input 
+                               id="filterEmail"
+                               style="width: 100%" 
+                               @input="loadActiveSubscriptions()" 
+                               v-model="filter.email"
+                               size="large" 
+                               placeholder="Rechercher par email" />
                             </Col>
                             <Col span="8">
-                            <label style="width: 100%" for="">Filter By Type</label>
-                            <Select clearable @onChange="loadActiveSubscriptions()" v-model="filter.sub_id" size="large"
-                                style="width: 100%">
+                            <label class="block text-sm font-medium text-gray-700 mb-1" for="filterType">Filtrer par type d'abonnement</label>
+                            <Select 
+                               id="filterType"
+                               clearable 
+                               @onChange="loadActiveSubscriptions()" 
+                               v-model="filter.sub_id" 
+                               size="large"
+                               style="width: 100%"
+                               placeholder="Tous les types">
                                 <Option v-for="(item, i) in subTypes" :key="i" :value="item.id">{{ item.name }}</Option>
                             </Select>
                             </Col>
                             <Col span="8">
-                            <label style="width: 100%" for="">Filter By Status</label>
-                            <Select clearable @onChange="loadActiveSubscriptions()" v-model="filter.status" size="large"
-                                style="width: 100%">
-                                <Option value="active">Active</Option>
-                                <Option value="inactive">Inactive</Option>
+                            <label class="block text-sm font-medium text-gray-700 mb-1" for="filterStatus">Filtrer par statut</label>
+                            <Select 
+                               id="filterStatus"
+                               clearable 
+                               @onChange="loadActiveSubscriptions()" 
+                               v-model="filter.status" 
+                               size="large"
+                               style="width: 100%"
+                               placeholder="Tous les statuts">
+                                <Option value="active">Actif</Option>
+                                <Option value="inactive">Inactif</Option>
                             </Select>
                             </Col>
                         </Row>
@@ -76,11 +92,11 @@
                             <template #action="{ row, index }">
                                 <div>
                                     <Button class="m-1" type="primary" size="small"
-                                        @click="detailsSubscription(row)">Details</Button>
+                                        @click="detailsSubscription(row)">Détails</Button>
                                     <Button v-if="row.status == 'active'" class="m-1" type="success" size="small"
-                                        @click="modifySubscription(row)">Modify</Button>
+                                        @click="modifySubscription(row)">Modifier</Button>
                                     <Button v-if="row.status == 'active'" class="m-1" type="error" size="small"
-                                        @click="unsubscribe(row)">Unsubscribe</Button>
+                                        @click="confirmUnsubscribe(row)" title="Désactiver cet abonnement">Désactiver</Button>
                                 </div>
                             </template>
                         </Table>
@@ -94,108 +110,45 @@
 
                     <div>
                         <!-- Add/Edit Subscription Modal -->
-                        <!-- <Modal okText="Back" width="1000" title="Add Subscription" v-model="addModal" :styles="{ top: '20px' }">
-                            <Row v-if="!modifySubButton" :gutter="16">
+                        <Modal okText="Fermer" cancelText="Annuler" width="1000" :title="modifySubButton ? 'Modifier l\'abonnement' : 'Ajouter un abonnement'" v-model="addModal" :styles="{ top: '10px', marginBottom: '10px' }" class="subscription-modal">
+                            <!-- Sélection de l'utilisateur -->
+                            <Row v-if="!modifySubButton" :gutter="16" class="mb-6">
                                 <Col span="8">
-                                <label style="width: 100%" for="">Select for which User</label>
-                                <Select v-model="user_id" size="large" style="width: 100%">
-                                    <Option v-for="(item, i) in users" :key="i" :value="item.id">{{ item.email }}</Option>
+                                <label class="block text-sm font-medium text-gray-700 mb-1" for="userSelect">Sélectionner un utilisateur</label>
+                                <Select 
+                                    id="userSelect"
+                                    v-model="user_id" 
+                                    size="large" 
+                                    style="width: 100%" 
+                                    placeholder="Rechercher un utilisateur par email"
+                                    filterable
+                                >
+                                    <Option v-for="user in users" :key="user.id" :value="user.id">{{ user.email }}</Option>
                                 </Select>
                                 </Col>
                             </Row>
-                            <div class="planItem__container">
-                                <div v-for="(item, i) in subscriptions" :key="i" class="planItem planItem--pro">
-                                    <div class="card">
-                                        <div class="card__header">
-                                            <div class="card__icon symbol"></div>
-                                            <h2>{{ item.name }}</h2>
-                                            <div class="card__label label">Best Value</div>
-                                        </div>
-                                        <div class="card__desc">{{ item.description }}</div>
-                                    </div>
-
-                                    <div class="price">${{ item.price }}<span>/ {{ item.durationValue }} {{
-                                            item.durationUnit }}(s)</span>
-                                    </div>
-
-                                    <ul class="featureList">
-                                        <li>2 links</li>
-                                        <li>Own analytics platform</li>
-                                        <li>Chat support</li>
-                                        <li class="disabled">Mobile application</li>
-                                        <li class="disabled">Unlimited users</li>
-                                    </ul>
-
-                                    <h4>Select Type</h4>
-                                    <RadioGroup v-model="item.subType">
-                                        <Radio label="month" border>Month</Radio>
-                                        <Radio label="year" border>Year</Radio>
-                                    </RadioGroup>
-
-                                    <button v-if="modifySubButton" @click="updateModifySubscription(item)"
-                                        class="button button--pink">Modify Subscription</button>
-                                    <button v-else @click="updateSubscription(item)" class="button button--pink">Add
-                                        Subscription</button>
-                                </div>
-
+                            
+                            <!-- Section tarifs avec les composants de la page d'accueil -->
+                            <!-- Affichage d'un message de chargement si les données ne sont pas encore disponibles -->
+                            <div v-if="!subscriptions || subscriptions.length === 0" class="text-center py-6">
+                                <Spin size="large" fix></Spin>
+                                <p class="mt-2 text-gray-600">Chargement des forfaits d'abonnement...</p>
                             </div>
-                        </Modal> -->
-                        <Modal okText="Back" width="1000" title="Add Subscription" v-model="addModal" :styles="{ top: '20px' }">
-                            <Row v-if="!modifySubButton" :gutter="16">
-                                <Col span="8">
-                                <label style="width: 100%" for="">Select for which User</label>
-                                <Select v-model="user_id" size="large" style="width: 100%">
-                                    <Option v-for="(item, i) in users" :key="i" :value="item.id">{{ item.email }}
-                                    </Option>
-                                </Select>
-                                </Col>
-                            </Row>
-                            <div
-                                class="mx-auto grid max-w-lg grid-cols-1 items-center gap-y-6 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-3">
-                                <div v-for="(tier, tierIdx) in subscriptions" :key="tier.id"
-                                    :class="[tier.featured ? 'relative bg-gray-900 shadow-2xl' : 'bg-white/60 sm:mx-8 lg:mx-0', tier.featured ? '' : tierIdx === 0 ? 'rounded-t-3xl sm:rounded-b-none lg:rounded-bl-3xl lg:rounded-tr-none' : 'sm:rounded-t-none lg:rounded-bl-none lg:rounded-tr-3xl', 'rounded-3xl p-8 ring-1 ring-gray-900/10 sm:p-10']">
-                                    <h3 :id="tier.id"
-                                        :class="[tier.featured ? 'text-indigo-400' : 'text-indigo-600', 'text-base/7 font-semibold']">
-                                        {{
-                                        tier.name }}</h3>
-                                    <p class="mt-4 flex items-baseline gap-x-2">
-                                        <span
-                                            :class="[tier.featured ? 'text-white' : 'text-gray-900', 'text-5xl font-semibold tracking-tight']">${{
-                                                tier.price }}</span>
-                                        <!-- <span :class="[tier.featured ? 'text-gray-400' : 'text-gray-500', 'text-base']">/month</span> -->
-                                    </p>
-                                    <p :class="[tier.featured ? 'text-gray-300' : 'text-gray-600', 'mt-6 text-base/7']">
-                                        {{
-                                            tier.description
-                                        }}</p>
-                                    <ul role="list"
-                                        :class="[tier.featured ? 'text-gray-300' : 'text-gray-600', 'mt-8 space-y-3 text-sm/6 sm:mt-10']">
-                                        <li v-for="feature in tier.features" :key="feature" class="flex gap-x-3">
-                                            <CheckIcon
-                                                :class="[tier.featured ? 'text-indigo-400' : 'text-indigo-600', 'h-6 w-5 flex-none']"
-                                                aria-hidden="true" />
-                                            {{ feature }}
-                                        </li>
-                                    </ul>
-                                    <!-- <RadioGroup size="small" class="mt-5" :style="tier.featured ? 'color: white' : ''" v-model="tier.subType">
-                                        <Radio label="month" border>Month</Radio>
-                                        <Radio label="year" border>Year</Radio>
-                                    </RadioGroup> -->
-                                    <div class="toggle-button">
-            <button @click="tier.subType = 'month'" :class="tier.subType == 'month' ? 'toggle-option active' : 'toggle-option'">Monthly</button>
-            <button @click="tier.subType = 'year'" :class="tier.subType == 'year' ? 'toggle-option active' : 'toggle-option'">Annually</button>
-          </div>
-                                    <a v-if="modifySubButton" @click="updateModifySubscription(tier)"
-                                        :class="[tier.featured ? 'bg-indigo-500 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline-indigo-500' : 'text-indigo-600 ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300 focus-visible:outline-indigo-600', 'mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10']">
-                                        Modify Subscription</a>
-                                    <a v-else @click="updateSubscription(tier)"
-                                        :class="[tier.featured ? 'bg-indigo-500 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline-indigo-500' : 'text-indigo-600 ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300 focus-visible:outline-indigo-600', 'mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10']">Get
-                                        started today</a>
-                                </div>
-                            </div>
+                            
+                            <!-- Rendu du composant PricingSection une fois les données chargées -->
+                            <!-- Utilisation du même composant que sur la page index -->
+                            <PricingSection 
+                                v-else
+                                :subscriptions="indexFormatSubscriptions()" 
+                                :title="modifySubButton ? 'Choisissez le nouveau forfait' : 'Choisissez un forfait à attribuer'"
+                                :subtitle="''"
+                                :description="modifySubButton ? 'Modifiez le forfait d\'abonnement de l\'utilisateur en sélectionnant une nouvelle option ci-dessous.' : 'Attribuez un forfait d\'abonnement à l\'utilisateur en sélectionnant une option ci-dessous.'"
+                                @subscribe="handleSubscriptionSelection"
+                                class="admin-pricing"
+                            />
                         </Modal>
 
-                        <Modal okText="Back" width="1000" title="Subscription" v-model="viewModel" :styles="{ top: '20px' }">
+                        <Modal okText="Fermer" cancelText="" width="1000" title="Détails de l'abonnement" v-model="viewModel" :styles="{ top: '20px' }">
                             <!-- this.viewSubscription -->
                             <div
                                 class="mx-auto grid max-w-lg grid-cols-1 items-center gap-y-6 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-0">
@@ -226,7 +179,7 @@
                                     </ul>
                                     <p class="mt-4 flex items-baseline gap-x-2">
                                         <span
-                                            :class="[tier.featured ? 'text-gray-400' : 'text-gray-500', 'text-base']">Status:
+                                            :class="[tier.featured ? 'text-gray-400' : 'text-gray-500', 'text-base']">Statut:
                                         </span>
                                         <span
                                             :class="[tier.featured ? 'text-white' : 'text-gray-900', 'text-5xl font-semibold tracking-tight']">{{
@@ -236,18 +189,16 @@
                                 :class="[tier.featured ? 'text-white' : 'text-gray-900', 'text-5xl font-semibold tracking-tight']">{{
                                 tier.user }}</span> -->
                                         <span
-                                            :class="[tier.featured ? 'text-gray-400' : 'text-gray-500', 'text-base']"><b>User:</b>
+                                            :class="[tier.featured ? 'text-gray-400' : 'text-gray-500', 'text-base']"><b>Utilisateur:</b>
                                             {{
                                             tier.user }}</span>
                                     </p>
                                     <p class="mt-4 flex items-baseline gap-x-2">
                                         <span
-                                            :class="[tier.featured ? 'text-gray-400' : 'text-gray-500', 'text-base']"><b>Start
-                                                Date:</b>
+                                            :class="[tier.featured ? 'text-gray-400' : 'text-gray-500', 'text-base']"><b>Date de début:</b>
                                             {{ tier.startDate }}</span>
                                         <span
-                                            :class="[tier.featured ? 'text-gray-400' : 'text-gray-500', 'text-base']"><b>End
-                                                Date:</b> {{
+                                            :class="[tier.featured ? 'text-gray-400' : 'text-gray-500', 'text-base']"><b>Date de fin:</b> {{
                                             tier.endDate }}</span>
                                     </p>
                                 </div>
@@ -260,7 +211,8 @@
     </div>
 </template>
 <script setup>
-import { CheckIcon } from '@heroicons/vue/20/solid'
+import { CheckIcon } from '@heroicons/vue/20/solid';
+import PricingSection from '@/components/sections/Pricing/PricingSection.vue';
 
 </script>
 <script>
@@ -289,23 +241,27 @@ export default {
             },
             columns: [
                 { title: "ID", key: "id", minWidth: 50, align: "center", resizable: true, sortable: true },
-                { title: "Subscriber", slot: "sub_info", minWidth: 200, sortable: true },
-                { title: "Plan", slot: "sub_name", key: "name", sortable: true, minWidth: 100 },
-                { title: "Price ($)", slot: "price", key: "price", sortable: true, minWidth: 50 },
-                // { title: "Duration", slot: "duration", key: "duration" },
+                { title: "Abonné", slot: "sub_info", minWidth: 200, sortable: true },
+                { title: "Forfait", slot: "sub_name", key: "name", sortable: true, minWidth: 100 },
+                { title: "Prix ($)", slot: "price", key: "price", sortable: true, minWidth: 50 },
+                // { title: "Durée", slot: "duration", key: "duration" },
                 // { title: "Description", slot: "desc", key: "description" },
-                { title: "Status", key: "status", sortable: true, minWidth: 50 },
-                // { title: "Start Date", key: "startDate", sortable: true },
-                // { title: "End Date", key: "endDate", sortable: true },
+                { title: "Statut", key: "status", sortable: true, minWidth: 50 },
+                // { title: "Date de début", key: "startDate", sortable: true },
+                // { title: "Date de fin", key: "endDate", sortable: true },
                 { title: "Action", slot: "action", minWidth: 200 },
             ],
             viewSubscription: [],
             activeSubscriptions: [],
-            subscriptions: [],
-            users: [],
+            subscriptionHistory: [],
             subTypes: [],
-            updateSubscriptionObj: { new_sub_id: 0, old_sub_id: 0 },
+            currentId: null,
+            updateSubscriptionObj: {},
+            userSubscriptionId: null,
+            selectedSubscriptionId: null,
+            subscriptions: [], // Initialiser comme un tableau vide
             modifySubButton: false,
+            old_sub_id: 0,
             paginationInfo: null,
             per_page: 5,
         };
@@ -319,18 +275,18 @@ export default {
                     if (index % 2 === 0) {
                         element.subType = 'month'
                         element.featured = false;
-                        element.features = ['25 products', 'Up to 10,000 subscribers', 'Advanced analytics', '24-hour support response time'];
+                        element.features = ['25 produits', 'Jusqu\'à 10 000 abonnés', 'Analytiques avancées', 'Délai de réponse de 24 heures'];
                     }
                     else {
                         element.subType = 'month'
                         element.featured = true;
                         element.features = [
-                            'Unlimited products',
-                            'Unlimited subscribers',
-                            'Advanced analytics',
-                            'Dedicated support representative',
-                            'Marketing automations',
-                            'Custom integrations',
+                            'Produits illimités',
+                            'Abonnés illimités',
+                            'Analytiques avancées',
+                            'Représentant de support dédié',
+                            'Automatisations de marketing',
+                            'Intégrations personnalisées',
                         ];
                     }
                 });
@@ -419,64 +375,348 @@ export default {
             this.addModal = true;
         },
 
-        // Update subscription
-        async updateSubscription(plan) {
-            if (!plan.subType || this.user_id <= 0) {
-                // alert('Select Type or User');
-                this.$Notice.info({
-                    title: 'Select Type and User',
-                    // desc: nodesc ? '' : 'Here is the notification description. Here is the notification description. '
-                });
-                return
+        // Attribution d'un abonnement à un utilisateur par l'administrateur
+        // Format exactement identique à celui utilisé sur la page index
+        indexFormatSubscriptions() {
+            // Vérifier si this.subscriptions est un tableau valide
+            if (!this.subscriptions || !Array.isArray(this.subscriptions)) {
+                console.warn('indexFormatSubscriptions: this.subscriptions n\'est pas un tableau valide');
+                return []; // Retourner un tableau vide pour éviter les erreurs
             }
+            
+            // Définir exactement les mêmes fonctionnalités que sur la page index
+            const freeFeatures = [
+                "Jusqu'à 25 produits", 
+                "Jusqu'à 5 000 visiteurs par mois",
+                "Galerie d'images standard",
+                "Modèles de site de base",
+                "Support par email (48h)",
+                "Sauvegardes hebdomadaires"
+            ];
+            
+            const midTierFeatures = [
+                "Toutes les fonctionnalités de l'offre Gratuite",
+                "Jusqu'à 100 produits",
+                "Jusqu'à 50 000 visiteurs par mois",
+                "Galerie d'images premium",
+                "Tous les modèles de site disponibles",
+                "Support prioritaire par email (24h)",
+                "Sauvegardes quotidiennes",
+                "Statistiques avancées",
+                "Personnalisation avancée"
+            ];
+            
+            const premiumFeatures = [
+                "Toutes les fonctionnalités de l'offre Mid-Tier",
+                "Produits illimités",
+                "Visiteurs illimités",
+                "Représentant de support dédié",
+                "Automatisations marketing personnalisées",
+                "Intégrations API avancées",
+                "Sauvegardes en temps réel",
+                "Analyses prédictives",
+                "Optimisation SEO premium",
+                "Exports de données illimités"
+            ];
+            
+            // Trouver les plans spéciaux comme dans la page index
+            const freePlan = this.subscriptions.find(sub => parseFloat(sub.price) === 0 || sub.name.toLowerCase().includes('free') || sub.name.toLowerCase().includes('gratuit'));
+            const premiumPlan = this.subscriptions.find(sub => parseFloat(sub.price) >= 100 || sub.name.toLowerCase().includes('premium'));
+            const midTierPlan = this.subscriptions.find(sub => 
+                sub.id !== (freePlan?.id || -1) && 
+                sub.id !== (premiumPlan?.id || -2) && 
+                (parseFloat(sub.price) > 0 && parseFloat(sub.price) < 100));
+            
+            const result = [];
+            
+            // Plan gratuit
+            if (freePlan) {
+                result.push({
+                    id: freePlan.id,
+                    subscription_id: freePlan.id,
+                    name: 'Forfait Gratuit',
+                    description: freePlan.description || 'Le forfait parfait pour démarrer avec notre produit.',
+                    monthlyPrice: 0,
+                    yearlyPrice: 0,
+                    features: freeFeatures,
+                    featured: false,
+                    type: 'month'
+                });
+            }
+            
+            // Plan intermédiaire
+            if (midTierPlan) {
+                result.push({
+                    id: midTierPlan.id,
+                    subscription_id: midTierPlan.id,
+                    name: 'Forfait Intermédiaire',
+                    description: midTierPlan.description || 'Support et infrastructure dédiés à votre entreprise.',
+                    monthlyPrice: midTierPlan.price,
+                    yearlyPrice: (midTierPlan.price * 0.8 * 12).toFixed(2), // Calcul identique à la page index
+                    features: midTierFeatures,
+                    featured: true, // Plan intermédiaire est mis en avant comme sur l'index
+                    type: 'month'
+                });
+            }
+            
+            // Plan premium
+            if (premiumPlan) {
+                result.push({
+                    id: premiumPlan.id,
+                    subscription_id: premiumPlan.id,
+                    name: 'Forfait Premium',
+                    description: premiumPlan.description || 'Support et infrastructure dédiés à votre entreprise avec service premium.',
+                    monthlyPrice: premiumPlan.price,
+                    yearlyPrice: (premiumPlan.price * 0.8 * 12).toFixed(2), // Calcul identique à la page index
+                    features: premiumFeatures,
+                    featured: false,
+                    type: 'month'
+                });
+            }
+            
+            // Ajouter les plans restants s'il y en a
+            this.subscriptions.forEach(sub => {
+                if (sub.id !== (freePlan?.id || -1) && sub.id !== (midTierPlan?.id || -2) && sub.id !== (premiumPlan?.id || -3) && !result.some(p => p.id === sub.id)) {
+                    result.push({
+                        id: sub.id,
+                        subscription_id: sub.id,
+                        name: sub.name,
+                        description: sub.description || 'Forfait personnalisé',
+                        monthlyPrice: sub.price,
+                        yearlyPrice: (sub.price * 0.8 * 12).toFixed(2), // Calcul identique à la page index
+                        features: [
+                            'Fonctionnalités complètes',
+                            'Support dédié',
+                            'Mises à jour régulières',
+                            'Services personnalisés'
+                        ],
+                        featured: false,
+                        type: 'month'
+                    });
+                }
+            });
+            
+            return result;
+        },
+        
+        // Gestion de la sélection d'un abonnement depuis PricingSection
+        // Sélectionner un plan et un type d'abonnement
+        selectPlan(plan, type) {
+            this.selectedSubscriptionId = plan.id;
+            this.selectedPlanType = type;
+            
+            // Trouve l'abonnement correspondant
+            const selectedSub = this.subscriptions.find(sub => sub.id === plan.id);
+            if (selectedSub) {
+                // Mettre à jour le type d'abonnement
+                selectedSub.subType = type;
+                
+                console.log('Abonnement sélectionné:', {
+                    id: selectedSub.id,
+                    type: selectedSub.subType,
+                    user_id: this.user_id
+                });
+                
+                if (this.modifySubButton) {
+                    this.updateModifySubscription(selectedSub);
+                } else {
+                    this.updateSubscription(selectedSub);
+                }
+            } else {
+                console.error('Impossible de trouver l\'abonnement avec l\'ID:', plan.id);
+            }
+        },
+        
+        // Méthode pour le composant PricingSection (garde la compatibilité)
+        handleSubscriptionSelection(payload) {
+            console.log('Abonnement sélectionné via PricingSection:', payload);
+            
+            // Met à jour le type d'abonnement et la sélection
+            this.selectedSubscriptionId = payload.subscription_id;
+            
+            // NE PAS CONVERTIR: Le backend attend 'monthly' et 'yearly'
+            // Le composant SubscriptionPlan envoie déjà ces valeurs correctement
+            const convertedType = payload.type;
+            
+            console.log('Type d\'abonnement reçu (non converti):', payload.type);
+                                  
+            this.selectedPlanType = convertedType;
+            
+            // Trouve l'abonnement correspondant
+            const selectedSub = this.subscriptions.find(sub => sub.id === payload.subscription_id);
+            if (selectedSub) {
+                // Convertir le type de subscription du composant SubscriptionPlan au format attendu par l'API
+                selectedSub.subType = convertedType; // Utilise la valeur convertie
+                
+                console.log('Abonnement à traiter (après conversion):', {
+                    id: selectedSub.id,
+                    type: selectedSub.subType, // Maintenant 'month' ou 'year'
+                    user_id: this.user_id
+                });
+                
+                if (this.modifySubButton) {
+                    this.updateModifySubscription(selectedSub);
+                } else {
+                    this.updateSubscription(selectedSub);
+                }
+            } else {
+                console.error('Impossible de trouver l\'abonnement avec l\'ID:', payload.subscription_id);
+            }
+        },
+        
+        // Attribuer un abonnement à un utilisateur
+        async updateSubscription(tier) {
+            // Si aucun utilisateur n'est sélectionné, afficher un message d'erreur
+            if (!this.user_id) {
+                this.$Notice.warning({
+                    title: 'Utilisateur requis',
+                    desc: 'Veuillez sélectionner un utilisateur avant d\'attribuer un abonnement.',
+                    duration: 6
+                });
+                return;
+            }
+
+            // Si aucun type d'abonnement n'est sélectionné, afficher un message d'erreur
+            if (!tier.subType) {
+                this.$Notice.warning({
+                    title: 'Type d\'abonnement requis',
+                    desc: 'Veuillez sélectionner un type d\'abonnement (mensuel ou annuel).',
+                    duration: 6
+                });
+                return;
+            }
+            
+            // Mettre à jour la sélection visuelle
+            this.selectedSubscriptionId = tier.id;
             try {
-                const response = await axiosInstance.post('/api/subscribe', { subscription_id: plan.id, type: plan.subType, user_id: this.user_id });
+                // Assurer que les IDs sont bien des nombres
+                const subscription_id = parseInt(tier.id, 10);
+                const user_id = parseInt(this.user_id, 10);
+                
+                console.log('Envoi des données:', { subscription_id, type: tier.subType, user_id });
+                
+                const response = await axiosInstance.post('/api/adminSubscribe', { 
+                    subscription_id, 
+                    type: tier.subType, 
+                    user_id 
+                });
 
                 if (response.data.success) {
-                    // alert('Subscription successful!');
                     this.$Notice.success({
-                        title: 'Subscription successful!',
-                        // desc: nodesc ? '' : 'Here is the notification description. Here is the notification description. '
+                        title: 'Abonnement ajouté avec succès!',
+                        desc: 'L\'utilisateur a maintenant accès à ce forfait.',
+                        duration: 5
                     });
                     this.loadActiveSubscriptions();
                     this.addModal = false;
                 } else {
                     this.$Notice.error({
-                        title: response.data.message ? response.data.message : 'Subscription failed. Please try again.',
-                        // desc: nodesc ? '' : 'Here is the notification description. Here is the notification description. '
+                        title: 'L\'ajout d\'abonnement a échoué',
+                        desc: response.data.message || 'Une erreur s\'est produite lors de l\'attribution de l\'abonnement. Veuillez réessayer.',
+                        duration: 8
                     });
-                    // alert(response.data.message ? response.data.message : 'Subscription failed. Please try again.');
                 }
             } catch (error) {
-                console.error('Error subscribing to plan:', error);
-                // alert('An error occurred while processing your subscription.');
-                this.$Notice.error({
-                    title: 'An error occurred while processing your subscription.',
-                    // desc: nodesc ? '' : 'Here is the notification description. Here is the notification description. '
-                });
+                console.error('Erreur lors de l\'ajout d\'abonnement:', error);
+                
+                // Messages d'erreur spécifiques selon le type d'erreur
+                if (error.response && error.response.status === 401) {
+                    this.$Notice.error({
+                        title: 'Accès refusé',
+                        desc: 'Vous devez être administrateur pour attribuer des abonnements.',
+                        duration: 8
+                    });
+                } else if (error.response && error.response.status === 400) {
+                    this.$Notice.error({
+                        title: 'Données invalides',
+                        desc: error.response.data?.message || 'Vérifiez les informations fournies et réessayez.',
+                        duration: 8
+                    });
+                } else {
+                    this.$Notice.error({
+                        title: 'Erreur lors de l\'attribution',
+                        desc: error.response?.data?.message || error.message || 'Une erreur inattendue s\'est produite.',
+                        duration: 8
+                    });
+                }
             }
         },
         async updateModifySubscription(new_sub) {
+            // Vérification améliorée pour la modification d'abonnement
             if (!new_sub.subType) {
-                // alert('Select Type!');
-                this.$Notice.info({
-                    title: 'Select Type',
-                    // desc: nodesc ? '' : 'Here is the notification description. Here is the notification description. '
+                this.$Notice.warning({
+                    title: 'Type d\'abonnement manquant',
+                    desc: 'Veuillez choisir entre abonnement mensuel ou annuel pour continuer.',
+                    duration: 6
                 });
-                return
+                return;
             }
-            this.updateSubscriptionObj.type = new_sub.subType
-            this.updateSubscriptionObj.new_sub_id = new_sub.id
-            this.updateSubscriptionObj.user_id = this.user_id
-            if (!this.updateSubscriptionObj.new_sub_id || !this.updateSubscriptionObj.old_sub_id) return;
+            
+            if (this.user_id <= 0) {
+                this.$Notice.warning({
+                    title: 'Aucun utilisateur sélectionné',
+                    desc: 'Veuillez sélectionner un utilisateur avant de modifier l\'abonnement.',
+                    duration: 6
+                });
+                return;
+            }
+            
+            // Assurer que les IDs sont bien des nombres
+            this.updateSubscriptionObj.type = new_sub.subType;
+            this.updateSubscriptionObj.new_sub_id = parseInt(new_sub.id, 10);
+            this.updateSubscriptionObj.user_id = parseInt(this.user_id, 10);
+            
+            if (!this.updateSubscriptionObj.new_sub_id || !this.updateSubscriptionObj.old_sub_id) {
+                this.$Notice.info({
+                    title: 'Informations d\'abonnement incomplètes',
+                });
+                return;
+            }
 
+            console.log('Envoi des données de modification:', this.updateSubscriptionObj);
+            
             this.loading = true;
             try {
-                await axiosInstance.post('/api/updateSubscription', this.updateSubscriptionObj);
-                this.loadActiveSubscriptions();
-                this.addModal = false;
+                const response = await axiosInstance.post('/api/updateSubscription', this.updateSubscriptionObj);
+                
+                if (response.data && response.data.success) {
+                    this.$Notice.success({
+                        title: 'Abonnement modifié avec succès!',
+                        desc: 'Le nouvel abonnement est maintenant actif pour cet utilisateur.',
+                        duration: 5
+                    });
+                    this.loadActiveSubscriptions();
+                    this.addModal = false;
+                } else {
+                    this.$Notice.warning({
+                        title: 'Résultat incertain',
+                        desc: response.data?.message || 'La réponse du serveur n\'indique pas clairement si la modification a réussi.',
+                        duration: 6
+                    });
+                }
             } catch (error) {
-                console.error("Error updating subscription:", error);
+                console.error("Erreur lors de la modification de l'abonnement:", error);
+                
+                // Messages d'erreur spécifiques
+                if (error.response && error.response.status === 404) {
+                    this.$Notice.error({
+                        title: 'Abonnement non trouvé',
+                        desc: 'L\'abonnement que vous essayez de modifier n\'existe pas ou a déjà été désactivé.',
+                        duration: 8
+                    });
+                } else if (error.response && error.response.status === 400) {
+                    this.$Notice.error({
+                        title: 'Paramètres invalides',
+                        desc: error.response.data?.message || 'Les informations fournies pour la modification sont incomplètes ou invalides.',
+                        duration: 8
+                    });
+                } else {
+                    this.$Notice.error({
+                        title: 'Erreur de modification',
+                        desc: error.response?.data?.message || error.message || 'Une erreur s\'est produite lors de la modification de l\'abonnement.',
+                        duration: 8
+                    });
+                }
             } finally {
                 this.loading = false;
             }
@@ -516,35 +756,33 @@ export default {
             }).format(new Date(row.endDate));
             this.viewModel = true;
             data.features = [
-                'Unlimited products',
-                'Unlimited subscribers',
-                'Advanced analytics',
-                'Dedicated support representative',
-                'Marketing automations',
-                'Custom integrations',
+                'Produits illimités',
+                'Abonnés illimités',
+                'Analytiques avancées',
+                'Représentant de support dédié',
+                'Automatisations de marketing',
+                'Intégrations personnalisées',
             ];
 
 
             this.viewSubscription = [data];
         },
-        async modifySubscription(subscription) {
-            this.user_id = subscription.userId
-            this.updateSubscriptionObj.old_sub_id = subscription.subscriptionId;
-            this.modifySubButton = true;
-            console.log(subscription)
-            // this.updateSubscriptionObj.old_sub_id = subscription.id
-            // try {
-            //     const response = await axiosInstance.post('/api/toModifyListSubscriptions', {id: subscription.id});
-
-            //     this.subscriptions = response.data;
-            //     } catch (error) {
-            //         console.error('Error fetching subscriptions:', error);
-            //         // Redirect to login if unauthorized
-            //         if (error.response && error.response.status === 401) {
-            //         router.push('/login');
-            //         }
-            //     }
-            this.addModal = true;
+        async modifySubscription(item) {
+            this.modifySubButton = true
+            this.viewRow = item;
+            this.addModal = true
+            this.user_id = item.user.id
+            this.currentId = item.id
+            
+            // Présélectionner l'abonnement actuel de l'utilisateur
+            this.selectedSubscriptionId = item.subscription_id;
+            
+            // Présélectionner le type d'abonnement
+            this.subscriptions.forEach(sub => {
+                if (sub.id === item.subscription_id) {
+                    sub.subType = item.type === 'monthly' ? 'month' : 'year';
+                }
+            });
         },
 
         // Reset form data
@@ -552,24 +790,77 @@ export default {
             this.form = { id: "", name: "", price: "", durationValue: "", durationUnit: "month", description: "" };
         },
 
-        // Open Add Modal
         addModalOn() {
-            this.resetForm();
+            // Charger les abonnements si nécessaire
+            if (!this.subscriptions || this.subscriptions.length === 0) {
+                this.fetchSubscriptions();
+            }
+            
             this.addModal = true;
+            // Réinitialiser la sélection d'abonnement et le bouton de modification
+            this.selectedSubscriptionId = null;
+            this.selectedPlanType = 'month';
             this.modifySubButton = false;
-            this.user_id = 0;
+            this.user_id = null;
+        },
+        confirmUnsubscribe(subscription) {
+            this.$Modal.confirm({
+                title: 'Confirmer la désactivation',
+                content: `Êtes-vous sûr de vouloir désactiver l'abonnement de <strong>${subscription.user.email}</strong>?<br>Cette action est irréversible.`,
+                okText: 'Oui, désactiver',
+                cancelText: 'Annuler',
+                onOk: () => {
+                    this.unsubscribe(subscription);
+                }
+            });
+        },
+        async unsubscribe(subscription) {
+            try {
+                const response = await axiosInstance.post('/api/unsubscribe', {
+                    subscription_id: subscription.id
+                });
+                if (response.data.success) {
+                    this.$Notice.success({
+                        title: 'Abonnement désactivé',
+                        desc: 'L\'abonnement a été désactivé avec succès.',
+                        duration: 5
+                    });
+                    this.loadActiveSubscriptions();
+                }
+            } catch (error) {
+                console.error('Erreur lors de la désactivation:', error);
+                this.$Notice.error({
+                    title: 'Erreur de désactivation',
+                    desc: error.response?.data?.message || error.message || 'Une erreur s\'est produite lors de la désactivation de l\'abonnement.',
+                    duration: 8
+                });
+            }
         },
     },
     mounted() {
-        this.loadSubscriptions();
+        // Charger les données quand le composant est monté
         this.loadActiveSubscriptions();
-        this.fetchSubscriptions();
         this.fetchUsers();
-
+        this.fetchSubscriptions();
+        
+        // Style personnalisé pour les modals de confirmation
+        document.head.insertAdjacentHTML('beforeend', `
+            <style>
+            .ivu-modal-confirm-head-icon-confirm .ivu-icon {
+                color: #f8bb86;
+            }
+            .ivu-modal-confirm-footer button + button {
+                margin-left: 10px;
+            }
+            </style>
+        `);
     },
 };
 </script>
 
 <style scoped>
-@import '@/assets/subscription/style.css';
+/* Réduire l'espace en haut de la modal pour afficher plus de contenu */
+.user-subscription-modal {
+  top: 10px;
+}
 </style>

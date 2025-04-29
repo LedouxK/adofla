@@ -1,28 +1,27 @@
 <template>
   <div :class="[
-    tier.featured ? 'relative bg-gray-900 shadow-2xl' : 'bg-white/60 sm:mx-8 lg:mx-0',
+    tier.featured ? 'relative bg-gray-900 shadow-2xl' : 'bg-white/60 sm:mx-3 lg:mx-0',
     tier.featured ? '' : tierIdx === 0 ? 'rounded-t-3xl sm:rounded-b-none lg:rounded-bl-3xl lg:rounded-tr-none' : 'sm:rounded-t-none lg:rounded-bl-none lg:rounded-tr-3xl',
-    'rounded-3xl p-8 ring-1 ring-gray-900/10 sm:p-10 flex flex-col'
+    'rounded-3xl p-5 ring-1 ring-gray-900/10 sm:p-6 flex flex-col subscription-card'
   ]">
     <h3 :id="tier.id" :class="[tier.featured ? 'text-indigo-400' : 'text-indigo-600', 'text-base/7 font-semibold']">
       {{ tier.name }}
     </h3>
-    <p class="mt-4 flex items-baseline gap-x-2">
+    <div class="mt-4 flex items-baseline gap-x-2">
       <!-- Affichage du prix avec hauteur fixe pour éviter les décalages -->
       <div class="price-display" :class="{ 'yearly': subscriptionType === 'year' }">
         <span :class="[tier.featured ? 'text-white' : 'text-gray-900', 'text-5xl font-semibold tracking-tight']">
           <span class="price-wrapper">{{ subscriptionType === 'month' ? tier.monthlyPrice : tier.yearlyPrice }} <span class="currency">€</span></span>
         </span>
         <span :class="[tier.featured ? 'text-gray-400' : 'text-gray-500', 'text-base ml-1']">
-          /mois
-          <span v-if="subscriptionType === 'year'" class="block text-xs text-right">facturé annuellement</span>
+          /mois <span v-if="subscriptionType === 'year'" class="text-xs ml-1">(facturé annuellement)</span>
         </span>
       </div>
-    </p>
-    <p :class="[tier.featured ? 'text-gray-300' : 'text-gray-600', 'mt-6 text-base/7']">
+    </div>
+    <p :class="[tier.featured ? 'text-gray-300' : 'text-gray-600', 'mt-4 text-base/7']">
       {{ tier.description }}
     </p>
-    <ul role="list" :class="[tier.featured ? 'text-gray-300' : 'text-gray-600', 'mt-8 space-y-3 text-sm/6 sm:mt-10']">
+    <ul role="list" :class="[tier.featured ? 'text-gray-300' : 'text-gray-600', 'mt-4 space-y-2 text-sm/6 sm:mt-5']">
       <li v-for="feature in tier.features" :key="feature" class="flex gap-x-3">
         <CheckIcon :class="[tier.featured ? 'text-indigo-400' : 'text-indigo-600', 'h-6 w-5 flex-none']" aria-hidden="true" />
         {{ feature }}
@@ -30,8 +29,8 @@
     </ul>
 
     <!-- Type d'abonnement avec utilisation du composant ToggleSwitch existant -->
-    <div class="mt-5">
-      <p :class="[tier.featured ? 'text-gray-200' : 'text-gray-700', 'text-sm font-medium mb-1']">Type d'abonnement</p>
+    <div class="mt-3">
+      <!-- Label 'Type d'abonnement' supprimé -->
       
       <!-- Conteneur avec hauteur fixe pour garantir la stabilité du layout -->
       <div class="billing-type-container">
@@ -55,19 +54,13 @@
       </div>
     </div>
 
-    <div class="mt-auto pt-8">
-      <button
-        type="button"
-        @click="subscribe"
-        :class="[
-          tier.featured
-            ? 'bg-indigo-500 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline-indigo-500'
-            : 'text-violet-600 ring-1 ring-inset ring-violet-200 hover:ring-violet-300 focus-visible:outline-violet-600',
-          'mt-4 block w-full rounded-md px-3.5 py-2.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-6'
-        ]">
-        S'abonner maintenant
-      </button>
-    </div>
+    <AppButton
+      :variant="tier.featured ? 'primary' : 'outline'"
+      class="mt-8 w-full"
+      @click="subscribe"
+    >
+      S'abonner maintenant
+    </AppButton>
   </div>
 </template>
 
@@ -105,3 +98,27 @@ const subscribe = () => {
   })
 }
 </script>
+
+<style scoped>
+@import '@/assets/subscription/style.css';
+
+/* Styles pour garantir l'alignement homogène */
+.subscription-card {
+  min-height: 540px; /* Hauteur minimale réduite pour les cartes */
+  display: flex;
+  flex-direction: column;
+  min-width: 250px; /* Élargir les cartes */
+}
+
+.price-display {
+  display: flex;
+  align-items: baseline;
+  height: 50px; /* Hauteur fixe réduite pour l'affichage du prix */
+}
+
+.billing-type-container {
+  height: 36px; /* Hauteur fixe réduite pour les toggle buttons */
+  margin-bottom: 10px;
+  margin-top: 5px; /* Ajouter un espace en haut après avoir supprimé le titre */
+}
+</style>

@@ -298,18 +298,25 @@ export default {
         },
 
         // Update subscription
-        async updateSubscription(new_sub) {
-            this.updateSubscriptionObj.new_sub_id = new_sub.id
-            this.loading = true;
-
-            // Utiliser le nouveau format de payload avec subscriptionType (month/year) converti en monthly/yearly
-            let payload = {
-                subscription_id: this.updateSubscriptionObj.new_sub_id,
-                type: new_sub.subscriptionType === 'year' ? 'yearly' : 'monthly',
+        // Méthode de souscription - Code EXACTEMENT identique à celui utilisé dans index.vue
+        async updateSubscription(payload) {
+            // Vérifier que le type est défini
+            if (!payload.type) {
+                this.$Notice.info({
+                    title: 'Sélectionnez un type!',
+                });
+                return;
             }
 
+            this.loading = true;
+            console.log('Payload reçu du composant SubscriptionPlan:', payload);
+
             try {
-                const response = await axiosInstance.post('/api/subscribe', payload);
+                // Appel API identique à celui de index.vue
+                const response = await axiosInstance.post('/api/subscribe', {
+                    subscription_id: payload.subscription_id,
+                    type: payload.type,
+                });
 
                 if (response.status == 200) {
                     if (response.data.success) {
@@ -433,8 +440,8 @@ export default {
                         featured,
                         features,
                         monthlyPrice,
-                        yearlyPrice,
-                        subscriptionType: 'month' // Valeur par défaut
+                        yearlyPrice
+                        // La propriété subscriptionType est SUPPRIMÉE puisqu'elle n'est pas utilisée et peut causer des conflits
                     };
                 });
             } catch (error) {

@@ -13,12 +13,12 @@
       <p class="mt-4 text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">{{ title }}</p>
     </div>
 
-    <p class="mx-auto mt-6 max-w-2xl text-pretty text-center text-lg font-medium text-gray-600 sm:text-xl/8">
+    <p class="mx-auto mt-3 max-w-2xl text-pretty text-center text-lg font-medium text-gray-600 sm:text-xl/8">
       {{ description }}
     </p>
     
-    <!-- Espace supplémentaire après le titre -->
-    <div class="h-10"></div>
+    <!-- Espace réduit après le titre -->
+    <div class="h-4"></div>
   </div>
 </template>
 
