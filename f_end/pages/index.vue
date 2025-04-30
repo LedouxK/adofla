@@ -7,7 +7,9 @@
           <img src="@/public/assets/media/logos/Flapi_logo.png" alt="Logo FlapiCMS" class="h-10" />
           <span class="text-black font-extrabold text-xl ml-2">FlapiCMS</span>
         </div>
-        <div class="flex items-center">
+        <div class="flex items-center space-x-6">
+          <a href="/" class="text-violet-600 font-medium">Accueil</a>
+          <a href="/documentation" class="text-gray-600 hover:text-violet-600 transition-colors">Documentation</a>
           <UserAvatar 
             :imagePath="`/uploads/profile/${profile.pPic}`" 
             @profile="goToProfile" 
