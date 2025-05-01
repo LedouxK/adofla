@@ -10,8 +10,25 @@
           </a>
         </div>
         <div class="p-6">
+          <!-- Message de confirmation d'activation de compte -->
+          <div v-if="accountActivated" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-5 animate-pulse" role="alert">
+            <p class="font-bold text-lg">Félicitations !</p>
+            <p class="text-base">Votre compte a bien été créé et activé. Vous pouvez maintenant vous connecter.</p>
+          </div>
+          
           <h2 class="text-xl font-semibold text-center mb-1">Connexion</h2>
           <p class="text-center text-gray-600 mb-4">Connectez-vous pour accéder à votre compte</p>
+
+          <!-- Message de succès après vérification d'email -->
+          <div v-if="emailVerified" class="mb-4 p-4 bg-green-100 border border-green-300 text-green-700 rounded-md shadow-sm">
+            <div class="flex items-center">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="font-medium">Votre adresse email a été vérifiée avec succès !</span>
+            </div>
+            <p class="mt-1 text-sm">Vous pouvez maintenant vous connecter à votre compte pour profiter de tous les services de FlapiCMS.</p>
+          </div>
 
           <form @submit.prevent="prelogin()">
             <!-- Email -->
@@ -77,11 +94,16 @@
             </div>
           </form>
 
-          <!-- Mot de passe oublié -->
+          <!-- Mot de passe oublié et inscription -->
           <div class="text-center mt-6 border-t pt-4">
             <p class="text-sm text-gray-600 mb-2">Vous avez oublié votre mot de passe ?</p>
-            <router-link to="/forgotPassword" class="block w-full py-2 px-4 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 font-medium transition duration-200">
+            <router-link to="/forgotPassword" class="block w-full py-2 px-4 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 font-medium transition duration-200 mb-3">
               <i class="fas fa-key mr-1"></i> Réinitialiser le mot de passe
+            </router-link>
+            
+            <p class="text-sm text-gray-600 mb-2 mt-4">Vous n'avez pas encore de compte ?</p>
+            <router-link to="/register" class="block w-full py-2 px-4 bg-indigo-100 text-indigo-700 rounded-md hover:bg-indigo-200 font-medium transition duration-200">
+              <i class="fas fa-user-plus mr-1"></i> Créer un compte
             </router-link>
           </div>
 
@@ -101,6 +123,8 @@ export default {
     return {
       loading: false,
       showPassword: false,
+      emailVerified: false,
+      accountActivated: false,
       user: {
         email: "",
         password: "",
@@ -208,7 +232,29 @@ export default {
 
   },
   mounted() {
-    console.log("Login component mounted");
+    document.title = "Login";
+    
+    // Vérifier si le compte vient d'être activé via le paramètre URL
+    if (this.$route.query.accountActivated === 'true') {
+      console.log('Compte activé avec succès, affichage du message');
+      this.accountActivated = true;
+      
+      // Nettoyer l'URL
+      if (history.pushState) {
+        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.pushState({ path: newUrl }, '', newUrl);
+      }
+      
+      // Pré-remplir l'email s'il est fourni
+      if (this.$route.query.email) {
+        this.user.email = this.$route.query.email;
+      }
+      
+      // Faire disparaître le message après 10 secondes
+      setTimeout(() => {
+        this.accountActivated = false;
+      }, 10000);
+    }
   },
 };
 </script>

@@ -147,60 +147,114 @@ export default class ProfilesController {
 
     public async store({ request, response, auth }: HttpContext) {
         try {
-          // Extract data from the request
-          const data = request.only(['name', 'role', 'about', 'user_id']);
+          // Extraire les données du profil de la requête
+          const profileData = request.only(['name', 'role', 'about']);
+          
+          // Extraire les données utilisateur de la requête
+          const userData = request.only(['first_name', 'last_name']);
       
-          // Get the authenticated user
-          const user = auth.user;
-          if (!user) {
+          // Récupérer l'utilisateur authentifié
+          const authUser = auth.user;
+          if (!authUser) {
             return response.unauthorized({ message: 'User not authenticated' });
           }
       
-          // Add the user ID to the data
-          data.user_id = user.id;
-
-          // const has_profile = Profile.query().where('user_id', user.id).first();
-          const has_profile = await Profile.findBy('user_id', user.id);
-          var profile
-          if (!has_profile) {
-            //create
-             profile = await Profile.create(data);
+          // Mettre à jour les données utilisateur si fournies
+          if (userData.first_name !== undefined || userData.last_name !== undefined) {
+            try {
+              const user = await authUser.refresh(); // S'assurer que les données sont fraîches
+              
+              // Ne mettre à jour que les champs qui sont fournis
+              if (userData.first_name !== undefined) {
+                user.first_name = userData.first_name;
+              }
+              
+              if (userData.last_name !== undefined) {
+                user.last_name = userData.last_name;
+              }
+              
+              await user.save();
+              console.log('Informations utilisateur mises à jour:', userData);
+            } catch (userError) {
+              console.error('Erreur lors de la mise à jour des informations utilisateur:', userError);
+              // On continue quand même pour mettre à jour le profil
+            }
           }
-          else
-          {
-            //update 
-             profile = await Profile.find(has_profile.id);
+      
+          // Ajouter l'ID utilisateur aux données du profil
+          const data = {
+            ...profileData,
+            user_id: authUser.id
+          };
+
+          // Vérifier si un profil existe déjà pour cet utilisateur
+          const has_profile = await Profile.findBy('user_id', authUser.id);
+          let profile;
+          
+          if (!has_profile) {
+            // Créer un nouveau profil
+            profile = await Profile.create(data);
+          }
+          else {
+            // Mettre à jour le profil existant
+            profile = await Profile.find(has_profile.id);
              
             if (profile) {
               profile.name = data.name;
               profile.role = data.role;
               profile.about = data.about;
-              await profile.save();
             } else {
               throw new Error('Profil introuvable malgré son existence dans la base');
             }
           }
       
-          // Update or create the profile
-          // const profile = await Profile.updateOrCreate(
-          //   { user_id: user.id }, data
-          // );
-      
-          // Return the created or updated profile
-          return response.created(profile);
+          // Récupérer le profil mis à jour avec les données utilisateur
+          const updatedProfile = await Profile.query()
+            .preload('user')
+            .where('id', profile.id)
+            .firstOrFail();
+          
+          // Retourner le profil créé ou mis à jour avec les informations utilisateur
+          return response.created({
+            ...updatedProfile.serialize(),
+            first_name: updatedProfile.user.first_name,
+            last_name: updatedProfile.user.last_name
+          });
         } catch (error) {
-          console.error(error);
-          return response.badRequest({ message: 'Failed to save profile', error: error.message });
+          console.error('Erreur lors de la sauvegarde du profil:', error);
+          return response.badRequest({ 
+            message: 'Erreur lors de la sauvegarde du profil', 
+            error: error.message 
+          });
         }
       }
+
+      // La méthode updateUserInfo a été supprimée car elle était redondante avec la méthode store améliorée
+      // qui peut déjà mettre à jour les informations utilisateur (first_name, last_name) en même temps que le profil
 
       public async index({ response, auth }: HttpContext) {
         const user = auth.user;
         if (!user) {
             return response.unauthorized({ message: 'User not authenticated' });
-          }
-          const users = await Profile.query().preload('user').where('user_id', user.id).first()
-          return users
         }
+        
+        // Récupérer le profil avec les informations utilisateur
+        const profile = await Profile.query()
+          .preload('user') // Charger la relation utilisateur
+          .where('user_id', user.id)
+          .first();
+        
+        if (!profile) {
+          return response.notFound({ message: 'Profil introuvable' });
+        }
+        
+        // Ajouter les champs first_name et last_name directement dans la réponse du profil
+        // pour simplifier l'accès côté frontend
+        return {
+          ...profile.serialize(),
+          first_name: profile.user.first_name,
+          last_name: profile.user.last_name
+        };
+      }
       
 }

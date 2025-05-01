@@ -21,10 +21,22 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare role_id: number
 
   @column()
+  declare first_name: string | null
+
+  @column()
+  declare last_name: string | null
+
+  @column()
   declare email: string
 
   @column({ serializeAs: null })
   declare password: string
+
+  @column()
+  declare email_verified: boolean
+
+  @column()
+  declare verification_token: string | null
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

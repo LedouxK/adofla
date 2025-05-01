@@ -159,11 +159,14 @@
             <div class="flex flex-col md:flex-row md:items-end justify-between">
               <div>
                 <div v-if="!saveEdit">
-                  <h1 class="text-2xl font-bold text-gray-900">{{ profile.name || 'Votre nom' }}</h1>
+                  <h1 class="text-2xl font-bold text-gray-900">{{ displayFullName }}</h1>
                   <p class="text-gray-600 mt-1">{{ profile.role || 'Votre rôle' }}</p>
                 </div>
                 <div v-else class="space-y-2 my-1">
-                  <Input v-model="profile.name" placeholder="Votre nom" class="w-full md:w-72" />
+                  <div class="flex space-x-2">
+                    <Input v-model="profile.first_name" placeholder="Prénom" class="w-full md:w-36" />
+                    <Input v-model="profile.last_name" placeholder="Nom" class="w-full md:w-36" />
+                  </div>
                   <Input v-model="profile.role" placeholder="Votre rôle ou titre" class="w-full md:w-72" />
                 </div>
               </div>
@@ -269,6 +272,14 @@
       const basicStore = useBasicStore()
       return { basicStore }
     },
+    computed: {
+      displayFullName() {
+        if (this.profile.first_name || this.profile.last_name) {
+          return [this.profile.first_name, this.profile.last_name].filter(Boolean).join(' ');
+        }
+        return this.profile.name || 'Votre nom';
+      }
+    },
     data() {
       return {
         selectedFile: null,
@@ -287,6 +298,8 @@
         },
         profile: {
           name: "",
+          first_name: "",
+          last_name: "",
           pPic: "default.jpg",
           role: "",
           about: ""
@@ -493,8 +506,13 @@
             },
           });
   
+          // Générer le nom complet à partir du prénom et du nom si disponibles
+          const fullName = [this.profile.first_name, this.profile.last_name].filter(Boolean).join(' ') || this.profile.name;
+          
           const response = await axiosInstance.post('/api/profile', {
-            name: this.profile.name,
+            name: fullName, // Envoyer le nom complet au champ name existant pour compatibilité
+            first_name: this.profile.first_name,
+            last_name: this.profile.last_name,
             role: this.profile.role,
             about: this.profile.about,
           });
