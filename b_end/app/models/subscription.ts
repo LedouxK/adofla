@@ -13,6 +13,17 @@ export default class Subscription extends BaseModel {
 
   @column()
   declare description: string
+  
+  @column()
+  declare is_active: boolean
+  
+  @column()
+  declare duration: number
+  
+  @column()
+  declare features: string
+  
+  // Aucune référence à des systèmes de paiement externes
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
