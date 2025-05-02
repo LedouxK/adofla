@@ -342,9 +342,9 @@ CREATE TABLE `subscriptions` (
 --
 
 INSERT INTO `subscriptions` (`id`, `name`, `price`, `description`, `created_at`, `updated_at`) VALUES
-(3, 'Mid-Teir Plan', 50.00, 'Support and infrastructure dedicated to your company.', '2024-12-03 08:37:26', '2024-11-19 02:40:22'),
-(5, 'Premium Plan', 120.00, 'Dedicated support and infrastructure for your company.', '2024-12-03 08:37:43', '2024-11-19 02:39:46'),
-(6, 'Free Plan', 0.00, 'The perfect plan if you\'re just getting started with our product.', '2024-12-03 08:34:44', '2024-11-19 02:39:08');
+(3, 'Forfait Intermédiaire', 50.00, 'Support et infrastructure dédiés à votre entreprise.', '2024-12-03 08:37:26', '2024-11-19 02:40:22'),
+(5, 'Forfait Premium', 120.00, 'Support et infrastructure dédiés à votre entreprise avec service premium.', '2024-12-03 08:37:43', '2024-11-19 02:39:46'),
+(6, 'Forfait Gratuit', 0.00, 'Le forfait parfait pour démarrer avec notre produit.', '2024-12-03 08:34:44', '2024-11-19 02:39:08');
 
 -- --------------------------------------------------------
 

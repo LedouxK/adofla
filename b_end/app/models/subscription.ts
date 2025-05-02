@@ -13,7 +13,7 @@ export default class Subscription extends BaseModel {
 
   @column()
   declare description: string
-
+  
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

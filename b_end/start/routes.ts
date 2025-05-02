@@ -24,6 +24,8 @@ const UserSubscriptionsController = () => import('#controllers/user_subscription
 const ProfilesController = () => import('#controllers/profiles_controller')
 const PaymentController = () => import('#controllers/payments_controller')
 const AuthController = () => import('#controllers/auth_controller')
+const ChatTicketsController = () => import('#controllers/chat_tickets_controller')
+const ChatMessagesController = () => import('#controllers/chat_messages_controller')
 
 router
   .group(() => {
@@ -70,6 +72,16 @@ router
     router.get('profile', [ProfilesController, 'index'])
     router.post('profilePicture', [ProfilesController, 'profilePicture'])
     // Route user/update-info supprimée car redondante avec profile
+    
+    // Routes pour le chat support (utilisateurs authentifiés)
+    router.get('support/tickets', [ChatTicketsController, 'index'])
+    router.get('support/tickets/:id', [ChatTicketsController, 'show'])
+    router.post('support/tickets', [ChatTicketsController, 'store'])
+    router.put('support/tickets/:id/status', [ChatTicketsController, 'updateStatus'])
+    router.put('support/tickets/:id/close', [ChatTicketsController, 'close'])
+    router.get('support/tickets/:ticket_id/messages', [ChatMessagesController, 'index'])
+    router.post('support/tickets/:ticket_id/messages', [ChatMessagesController, 'store'])
+    router.put('support/tickets/:ticket_id/messages/read', [ChatMessagesController, 'markAsRead'])
   })
   .prefix('/api')
   .use(middleware.auth())
